@@ -1,0 +1,30 @@
+{
+    "_comment": "数据库连接配置文件 - 开发者可直接编辑此文件",
+    "_instructions": "每个连接对象包含 host(主机), port(端口), service_name(服务名), username(用户名), password(密码)",
+    "_example": "LOCAL_ORACLE 是连接名称，将在下拉框中显示",
+
+    "LOCAL_ORACLE": {
+        "host": "localhost",
+        "port": 1521,
+        "service_name": "ORCL",
+        "username": "scott",
+        "password": "tiger",
+        "_note": "本地开发环境"
+    },
+    "UAT_ORACLE": {
+        "host": "192.168.1.100",
+        "port": 1521,
+        "service_name": "UATDB",
+        "username": "app_user",
+        "password": "uat_pass",
+        "_note": "UAT测试环境"
+    },
+    "PROD_ORACLE": {
+        "host": "oracle.prod.company.com",
+        "port": 1521,
+        "service_name": "PRODDB",
+        "username": "prod_user",
+        "password": "prod_pass",
+        "_note": "生产环境 - 请勿随意修改"
+    }
+}
