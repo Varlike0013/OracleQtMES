@@ -8,6 +8,7 @@
 
 struct DbConnectionInfo
 {
+    QString key;
     QString host;
     int port;
     QString serviceName;

@@ -78,7 +78,7 @@ void LoginDialog::on_btnConnect_clicked()
     DbConnectionInfo connInfo = configMgr.getConnection(dbName);
     // 4. 使用 OracleManager 测试数据库连通性
     OracleManager& oracleMgr = OracleManager::instance();
-    DbConnectionResult result = oracleMgr.connectDatabase(connInfo);
+    DbConnectionResult result = oracleMgr.connectDatabase(connInfo,loginConnect);
 
     if (!result.success) {
         QMessageBox::critical(this, "连接失败",
@@ -87,9 +87,10 @@ void LoginDialog::on_btnConnect_clicked()
     }
 
     // 5. 连接成功，保存连接信息
-
+    OracleManager& mgr = OracleManager::instance();
+    mgr.setCurrentUser(user, pass, connInfo);
     // 6. 关闭测试连接（释放资源）
-    oracleMgr.closeTestConnection();
+    oracleMgr.closeConnection(loginConnect);
 
     QMessageBox::information(this, "成功", "数据库连接成功！");
     accept();  // 关闭对话框，返回 QDialog::Accepted
@@ -109,3 +110,8 @@ QString LoginDialog::getPassword() const
 {
     return ui->editPassword->text().trimmed();
 }
+void LoginDialog::on_btnCancel_clicked()
+{
+    reject();
+}
+

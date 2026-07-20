@@ -24,9 +24,12 @@ public:
 private slots:
     void on_btnConnect_clicked();
 
+    void on_btnCancel_clicked();
+
 private:
     Ui::LoginDialog *ui;
     void loadDatabaseConfigs(); // 加载数据库配置列表
+    QString loginConnect = "logined";
 };
 
 #endif // LOGINDIALOG_H

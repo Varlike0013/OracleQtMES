@@ -69,33 +69,27 @@ bool DbConfigManager::loadConfig(const QString &filePath)
     // 如果配置文件不存在，创建一个默认的配置文件
     if (!QFile::exists(path)) {
         qWarning() << "配置文件不存在，正在创建默认配置...";
-        // 创建默认配置
-        DbConnectionInfo defaultLocal;
-        defaultLocal.host = "localhost";
-        defaultLocal.port = 1521;
-        defaultLocal.serviceName = "ORCL";
-        defaultLocal.username = "scott";
-        defaultLocal.password = "tiger";
-        defaultLocal.note = "本地开发环境";
-        addConnection("LOCAL_ORACLE", defaultLocal);
 
-        DbConnectionInfo defaultUat;
-        defaultUat.host = "192.168.1.100";
-        defaultUat.port = 1521;
-        defaultUat.serviceName = "UATDB";
-        defaultUat.username = "app_user";
-        defaultUat.password = "uat_pass";
-        defaultUat.note = "UAT测试环境";
-        addConnection("UAT_ORACLE", defaultUat);
+        // ----- 创建默认配置（使用新的 JSON 结构）-----
+        DbConnectionInfo defaultSajet;
+        defaultSajet.key = "SAJET";
+        defaultSajet.host = "10.240.144.17";
+        defaultSajet.port = 1521;
+        defaultSajet.serviceName = "SAJET";
+        defaultSajet.username = "SAJET";
+        defaultSajet.password = "tech";
+        defaultSajet.note = "GESZ";
+        addConnection("SAJET", defaultSajet);
 
-        DbConnectionInfo defaultProd;
-        defaultProd.host = "oracle.prod.company.com";
-        defaultProd.port = 1521;
-        defaultProd.serviceName = "PRODDB";
-        defaultProd.username = "prod_user";
-        defaultProd.password = "prod_pass";
-        defaultProd.note = "生产环境";
-        addConnection("PROD_ORACLE", defaultProd);
+        DbConnectionInfo defaultGedt;
+        defaultGedt.key = "GEDT";
+        defaultGedt.host = "10.240.144.199";
+        defaultGedt.port = 1521;
+        defaultGedt.serviceName = "SAJET";
+        defaultGedt.username = "SAJET";
+        defaultGedt.password = "tech";
+        defaultGedt.note = "GESZ";
+        addConnection("GEDT", defaultGedt);
 
         // 保存默认配置到文件
         if (saveConfig()) {
@@ -191,11 +185,11 @@ bool DbConfigManager::fromJson(const QJsonObject &root)
     m_configs.clear();
     for (auto it = root.begin(); it != root.end(); ++it) {
         QString key = it.key();
-        // 跳过注释字段（以 _ 开头）
         if (key.startsWith("_")) continue;
 
         QJsonObject connObj = it.value().toObject();
         DbConnectionInfo info;
+        info.key = key;   // 保存键名
         info.host = connObj["host"].toString();
         info.port = connObj["port"].toInt(1521);
         info.serviceName = connObj["service_name"].toString();
