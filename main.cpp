@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "sajetmainwindow.h"
+#include "gedtmainwindow.h"
 #include "logindialog.h"  // 添加登录对话框的头文件
 #include "oracle_manager.h"
 
@@ -31,11 +33,21 @@ int main(int argc, char *argv[])
         return 0;  // 用户取消了登录，直接退出
     }
 
-    Db connect = OracleManager::getCurrentConnection();
-    QString username = user.username;
-    QString dbName = user.connectionName;
+    QString username = OracleManager::getCurrentUsername();
+    QString dbKey = OracleManager::getCurrentDbkey();
 
-    MainWindow w;
-    w.show();
+    dbKey = "TEST";
+
+    // 根据 dbKey 创建对应的主窗口
+    QMainWindow *window = nullptr;
+    if (dbKey == "SAJET") {
+        window = new SajetMainWindow;
+    } else if (dbKey == "GEDT") {
+        window = new GedtMainWindow;
+    } else {
+        window = new MainWindow;
+    }
+    window->show();
+
     return QApplication::exec();
 }

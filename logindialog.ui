@@ -35,20 +35,33 @@
     <property name="bottomMargin">
      <number>10</number>
     </property>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="editPassword">
+      <property name="echoMode">
+       <enum>QLineEdit::EchoMode::Password</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QComboBox" name="comboDatabase"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="editUsername"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>数据库：</string>
+       <string>用户名：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
       <property name="text">
-       <string>用户名：</string>
+       <string>数据库：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -65,14 +78,12 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="comboDatabase"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="editUsername"/>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="editPassword"/>
+    <item row="2" column="2">
+     <widget class="QRadioButton" name="radioPassword">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

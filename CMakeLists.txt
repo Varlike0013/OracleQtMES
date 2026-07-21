@@ -17,6 +17,8 @@ qt_add_executable(OracleQtMES
     Oracle/oracle_sajet.cpp Oracle/oracle_sajet.h
     Oracle/oracle_dt.h Oracle/oracle_dt.cpp
     Oracle/oracle_manager.h Oracle/oracle_manager.cpp
+    Sajet/sajetmainwindow.h Sajet/sajetmainwindow.cpp Sajet/sajetmainwindow.ui
+    Gedt/gedtmainwindow.h Gedt/gedtmainwindow.cpp Gedt/gedtmainwindow.ui
 
 )
 
@@ -30,10 +32,13 @@ target_link_libraries(OracleQtMES
         Qt::Core
         Qt::Widgets
         Qt6::Sql
+        Qt::
 )
 target_include_directories(OracleQtMES PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/oracle
+    ${CMAKE_CURRENT_SOURCE_DIR}/Sajet
+    ${CMAKE_CURRENT_SOURCE_DIR}/Gedt
 )
 
 install(TARGETS OracleQtMES

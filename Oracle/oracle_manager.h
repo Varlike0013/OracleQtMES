@@ -31,6 +31,7 @@ public:
     static bool isUserLoggedIn();
     static QString getCurrentUsername();
     static QString getCurrentDbname();
+    static QString getCurrentDbkey();
     static DbConnectionInfo getCurrentConnection();
 
 

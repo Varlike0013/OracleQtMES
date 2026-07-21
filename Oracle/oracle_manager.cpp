@@ -115,3 +115,7 @@ QString OracleManager::getCurrentDbname()
 {
     return m_currentConnectInfo.connectionInfo.serviceName;
 }
+QString OracleManager::getCurrentDbkey()
+{
+    return m_currentConnectInfo.connectionInfo.key;
+}

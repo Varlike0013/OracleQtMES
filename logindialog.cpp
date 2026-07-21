@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QSqlQuery>
 #include <QStandardPaths>
 
 LoginDialog::LoginDialog(QWidget *parent)
@@ -74,9 +75,8 @@ void LoginDialog::on_btnConnect_clicked()
         QMessageBox::warning(this, "错误", "未找到数据库配置: " + dbName);
         return;
     }
-    // 3.获取数据库信息
+    // 3.获取数据库信息 使用 OracleManager 测试数据库连通性
     DbConnectionInfo connInfo = configMgr.getConnection(dbName);
-    // 4. 使用 OracleManager 测试数据库连通性
     OracleManager& oracleMgr = OracleManager::instance();
     DbConnectionResult result = oracleMgr.connectDatabase(connInfo,loginConnect);
 
@@ -85,7 +85,12 @@ void LoginDialog::on_btnConnect_clicked()
                               "无法连接到数据库:\n" + result.errorMessage);
         return;
     }
-
+    // 4. 连接成功，调用存储过程验证用户
+    if (!validateUser(result.database, user, pass)) {
+        // 验证失败，关闭连接并返回
+        oracleMgr.closeConnection(loginConnect);
+        return;
+    }
     // 5. 连接成功，保存连接信息
     OracleManager& mgr = OracleManager::instance();
     mgr.setCurrentUser(user, pass, connInfo);
@@ -113,5 +118,37 @@ QString LoginDialog::getPassword() const
 void LoginDialog::on_btnCancel_clicked()
 {
     reject();
+}
+bool LoginDialog::validateUser(QSqlDatabase &db, const QString &username, const QString &password)
+{
+    QSqlQuery query(db);
+    QString resultStr;
+    resultStr.reserve(200);
+    // 调用存储过程 check_emp
+    query.prepare("BEGIN SAJET.SJ_CHK_EMP_PWD(:username, :password, :result); END;");
+    query.bindValue(":username", username);
+    query.bindValue(":password", password);
+    query.bindValue(":result", resultStr,QSql::Out);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "存储过程调用失败",
+                              "执行 SJ_CHK_EMP_PWD 存储过程出错:\n" + query.lastError().text());
+        return false;
+    }
+    QString result = query.boundValue(":result").toString();
+    if (result == "OK") {
+        return true;
+    } else {
+        QMessageBox::warning(this, "登录失败", "验证失败：" + result);
+        return false;
+    }
+}
+void LoginDialog::on_radioPassword_toggled(bool checked)
+{
+    if (checked) {
+        ui->editPassword->setEchoMode(QLineEdit::Normal);
+    } else {
+        ui->editPassword->setEchoMode(QLineEdit::Password);
+    }
 }
 

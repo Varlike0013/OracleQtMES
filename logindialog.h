@@ -26,10 +26,13 @@ private slots:
 
     void on_btnCancel_clicked();
 
+    void on_radioPassword_toggled(bool checked);
+
 private:
     Ui::LoginDialog *ui;
     void loadDatabaseConfigs(); // 加载数据库配置列表
     QString loginConnect = "logined";
+    bool validateUser(QSqlDatabase &db, const QString &username, const QString &password); //数据库验证用户是否存在
 };
 
 #endif // LOGINDIALOG_H
