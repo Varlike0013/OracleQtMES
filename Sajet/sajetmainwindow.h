@@ -15,6 +15,9 @@ public:
     explicit SajetMainWindow(QWidget *parent = nullptr);
     ~SajetMainWindow();
 
+private slots:
+    void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
+
 private:
     Ui::SajetMainWindow *ui;
 };

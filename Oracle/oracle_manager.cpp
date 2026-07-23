@@ -91,7 +91,7 @@ void OracleManager::setCurrentUser(const QString &username, const QString &passw
     m_currentConnectInfo.connectionInfo = info;
     m_currentConnectInfo.loginTime = QDateTime::currentDateTime();
 }
-const CurrentConnectInfo& OracleManager::getCurrentConnectInfo()
+const CurrentConnectInfo& OracleManager::getCurrentConnect()
 {
     return m_currentConnectInfo;
 }
@@ -103,7 +103,7 @@ QString OracleManager::getCurrentUsername()
 {
     return m_currentConnectInfo.username;
 }
-DbConnectionInfo OracleManager::getCurrentConnection()
+DbConnectionInfo OracleManager::getCurrentDbInfo()
 {
     return m_currentConnectInfo.connectionInfo;
 }
@@ -118,4 +118,15 @@ QString OracleManager::getCurrentDbname()
 QString OracleManager::getCurrentDbkey()
 {
     return m_currentConnectInfo.connectionInfo.key;
+}
+void OracleManager::disconnectAll()
+{
+    // 复制一份连接名称列表，因为 closeConnection 会修改 m_openConnections
+    QStringList connections = m_openConnections;
+    for (const QString &name : connections) {
+        closeConnection(name);
+    }
+    // 确保列表清空（closeConnection 应该已经移除所有，但以防万一）
+    m_openConnections.clear();
+    qDebug() << "所有数据库连接已关闭";
 }

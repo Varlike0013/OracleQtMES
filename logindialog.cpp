@@ -97,7 +97,6 @@ void LoginDialog::on_btnConnect_clicked()
     // 6. 关闭测试连接（释放资源）
     oracleMgr.closeConnection(loginConnect);
 
-    QMessageBox::information(this, "成功", "数据库连接成功！");
     accept();  // 关闭对话框，返回 QDialog::Accepted
 }
 

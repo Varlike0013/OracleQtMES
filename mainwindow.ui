@@ -6,49 +6,99 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>数据库浏览器</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QSplitter" name="splitter">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>800</width>
-      <height>570</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Orientation::Horizontal</enum>
-    </property>
-    <widget class="QTreeWidget" name="treeTables">
-     <column>
-      <property name="text">
-       <string>表名</string>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LayoutDirection::LeftToRight</enum>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
-     </column>
-    </widget>
-    <widget class="QTableView" name="tableView">
-     <property name="alternatingRowColors">
-      <bool>true</bool>
-     </property>
-     <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-    </widget>
-   </widget>
+      <property name="opaqueResize">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="leftPanel" native="true">
+       <property name="maximumSize">
+        <size>
+         <width>300</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="leftLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="searchEdit">
+          <property name="placeholderText">
+           <string>搜索表名或存储过程...</string>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="treeObjects">
+          <property name="contextMenuPolicy">
+           <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+          </property>
+          <property name="columnCount">
+           <number>1</number>
+          </property>
+          <property name="headerLabel" stdset="0">
+           <string>对象名称</string>
+          </property>
+          <column>
+           <property name="text">
+            <string notr="true">     数据库内容浏览树</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="tabsClosable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>頁面</string>
+        </attribute>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1280</width>
      <height>20</height>
     </rect>
    </property>
@@ -62,8 +112,7 @@
     <property name="title">
      <string>数据库</string>
     </property>
-    <addaction name="actionConnect"/>
-    <addaction name="actionDisconnect"/>
+    <addaction name="actionchangedb"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuDatabase"/>
@@ -78,12 +127,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionConnect"/>
-   <addaction name="actionDisconnect"/>
    <addaction name="separator"/>
    <addaction name="actionQuery"/>
-   <addaction name="actionInsertRow"/>
-   <addaction name="actionDeleteRow"/>
    <addaction name="separator"/>
    <addaction name="actionSubmit"/>
    <addaction name="actionRevert"/>
@@ -97,38 +142,12 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionConnect">
-   <property name="text">
-    <string>连接</string>
-   </property>
-   <property name="toolTip">
-    <string>连接到数据库</string>
-   </property>
-  </action>
-  <action name="actionDisconnect">
-   <property name="text">
-    <string>断开</string>
-   </property>
-   <property name="toolTip">
-    <string>断开数据库</string>
-   </property>
-  </action>
   <action name="actionQuery">
    <property name="text">
     <string>查询</string>
    </property>
    <property name="toolTip">
     <string>执行SQL查询</string>
-   </property>
-  </action>
-  <action name="actionInsertRow">
-   <property name="text">
-    <string>插入行</string>
-   </property>
-  </action>
-  <action name="actionDeleteRow">
-   <property name="text">
-    <string>删除行</string>
    </property>
   </action>
   <action name="actionSubmit">
@@ -145,6 +164,14 @@
    </property>
    <property name="toolTip">
     <string>撤销所有更改</string>
+   </property>
+  </action>
+  <action name="actionchangedb">
+   <property name="text">
+    <string>切换数据库</string>
+   </property>
+   <property name="toolTip">
+    <string>changedb</string>
    </property>
   </action>
  </widget>

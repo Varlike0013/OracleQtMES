@@ -6,39 +6,334 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>960</width>
     <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>SAJET MES</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>400</y>
-      <width>53</width>
-      <height>15</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Sajet</string>
-    </property>
-   </widget>
+   <layout class="QVBoxLayout" name="centralLayout">
+    <item>
+     <widget class="QSplitter" name="splitter_3">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <widget class="QSplitter" name="splitter_2">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <widget class="QWidget" name="widget_3" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+            QWidget#widget_3 {
+                background-color: #F0F4F8;
+                border-radius: 15px;
+                border: 1px solid #D0D9E5;
+            }
+            </string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>8</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="styleSheet">
+            <string notr="true">
+                font-size: 28px;
+                font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+                font-weight: bold;
+                color: #FFFFFF;
+                background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #1B3B5C, stop:1 #2A5F7A);
+                border: none;
+                border-radius: 12px;
+                padding: 8px 0;
+                min-height: 40px;
+            </string>
+           </property>
+           <property name="text">
+            <string>MES</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="styleSheet">
+            <string notr="true">
+                font-size: 28px;
+                font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+                font-weight: bold;
+                color: #FFFFFF;
+                background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #6B2F00, stop:1 #9C4A1A);
+                border: none;
+                border-radius: 12px;
+                padding: 8px 0;
+                min-height: 40px;
+            </string>
+           </property>
+           <property name="text">
+            <string>SAJET</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="widget_4" native="true">
+        <property name="styleSheet">
+         <string notr="true">
+         QWidget#widget_4 {
+             background-color: #F8FAFC;
+             border-radius: 8px;
+             border: 1px solid #E2E8F0;
+         }
+         QPushButton, QToolButton {
+             max-width: 70px;
+             max-height: 30px;
+             background-color: #FFFFFF;
+             border: 1px solid #CBD5E1;
+             border-radius: 4px;
+             padding: 4px 10px;
+             font-size: 12px;
+             color: #1E293B;
+         }
+         QPushButton:hover, QToolButton:hover {
+             background-color: #F1F5F9;
+             border-color: #94A3B8;
+         }
+         QLabel {
+             background-color: #F1F5F9;
+             border-radius: 4px;
+             padding: 4px 10px;
+             color: #334155;
+         }
+        </string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>4</number>
+         </property>
+         <item>
+          <widget class="QWidget" name="widget_5" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="btnConnect">
+              <property name="text">
+               <string>系统</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnDisconnect">
+              <property name="text">
+               <string>设置</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnQuery">
+              <property name="text">
+               <string>帮助</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnSwitchDB">
+              <property name="text">
+               <string>其他</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget_6" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>快捷工具栏：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="tabBtn1">
+              <property name="text">
+               <string>功能1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="tabBtn2">
+              <property name="text">
+               <string>功能2</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="tabBtn3">
+              <property name="text">
+               <string>功能3</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <widget class="QWidget" name="widget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>300</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="searchEdit">
+          <property name="placeholderText">
+           <string>输入关键字过滤...</string>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="treeWidget">
+          <column>
+           <property name="text">
+            <string>系统功能索引</string>
+           </property>
+          </column>
+            <item>
+                <property name="text">
+                <string>P01系统基本信息</string>
+                </property>
+                <property name="expanded">
+                <bool>true</bool>
+                </property>
+                    <item>
+                    <property name="text"><string>员工</string></property>
+                    </item>
+                    <item>
+                    <property name="text"><string>途程</string></property>
+                    </item>
+            </item>
+            <item>
+                <property name="text">
+                <string>P02重工作业</string>
+                </property>
+                    <item>
+                    <property name="text">
+                        <string>清除料件</string>
+                    </property>
+                    </item>
+            </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+       <widget class="QWidget" name="widget_2" native="true">
+       <layout class="QVBoxLayout" name="tabLayout">
+        <item>
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="tab">
+           <attribute name="title">
+            <string>页面</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="tabLayout_1">
+            <item>
+             <widget class="QLabel" name="welcomeLabel">
+              <property name="text">
+               <string>请点击左侧功能栏目</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

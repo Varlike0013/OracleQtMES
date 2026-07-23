@@ -27,20 +27,18 @@ class OracleManager : public QObject
 
 public:
     static OracleManager& instance();
-    static const CurrentConnectInfo& getCurrentConnectInfo();
+    static const CurrentConnectInfo& getCurrentConnect();
     static bool isUserLoggedIn();
     static QString getCurrentUsername();
     static QString getCurrentDbname();
     static QString getCurrentDbkey();
-    static DbConnectionInfo getCurrentConnection();
-
+    static DbConnectionInfo getCurrentDbInfo();
 
     DbConnectionResult connectDatabase(const DbConnectionInfo &connInfo,const QString &connectname); // 尝试连接数据库（根据连接信息）
-
     void closeConnection(const QString &connectname);
     void setCurrentUser(const QString &username, const QString &password, const DbConnectionInfo &info);
-
     QStringList getOpenConnectionNames() const; // 获取所有已打开的连接名称列表
+    void disconnectAll();
 
 private:
     explicit OracleManager(QObject *parent = nullptr);

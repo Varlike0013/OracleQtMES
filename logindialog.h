@@ -23,9 +23,7 @@ public:
 
 private slots:
     void on_btnConnect_clicked();
-
     void on_btnCancel_clicked();
-
     void on_radioPassword_toggled(bool checked);
 
 private:

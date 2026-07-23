@@ -32,7 +32,6 @@ target_link_libraries(OracleQtMES
         Qt::Core
         Qt::Widgets
         Qt6::Sql
-        Qt::
 )
 target_include_directories(OracleQtMES PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}

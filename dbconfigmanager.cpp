@@ -82,14 +82,14 @@ bool DbConfigManager::loadConfig(const QString &filePath)
         addConnection("SAJET", defaultSajet);
 
         DbConnectionInfo defaultGedt;
-        defaultGedt.key = "GEDT";
-        defaultGedt.host = "10.240.144.199";
+        defaultGedt.key = "GEDTA";
+        defaultGedt.host = "10.240.144.180";
         defaultGedt.port = 1521;
         defaultGedt.serviceName = "SAJET";
         defaultGedt.username = "SAJET";
         defaultGedt.password = "tech";
         defaultGedt.note = "GESZ";
-        addConnection("GEDT", defaultGedt);
+        addConnection("GEDTA", defaultGedt);
 
         // 保存默认配置到文件
         if (saveConfig()) {
