@@ -119,6 +119,20 @@ QString OracleManager::getCurrentDbkey()
 {
     return m_currentConnectInfo.connectionInfo.key;
 }
+void OracleManager::setCurrentDbMain(const QString &connName) {
+    m_connectionName = connName;
+}
+QSqlDatabase OracleManager::getCurrentDbMain() const {
+    // 总是从 Qt 的全局连接池中按名称获取
+    if (m_connectionName.isEmpty()) {
+        return QSqlDatabase(); // 返回无效连接
+    }
+    return QSqlDatabase::database(m_connectionName, false); // false 表示不报错
+}
+bool OracleManager::isDatabaseValid() const {
+    QSqlDatabase db = getCurrentDbMain();
+    return db.isValid() && db.isOpen();
+}
 void OracleManager::disconnectAll()
 {
     // 复制一份连接名称列表，因为 closeConnection 会修改 m_openConnections

@@ -20,6 +20,9 @@ private slots:
 
 private:
     Ui::StatusTag *ui;
+
+    void update_table_travel(QString serial_number);
+    void update_table_parts(QString serial_number);
 };
 
 #endif // STATUSTAG_H

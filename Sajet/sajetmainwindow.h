@@ -25,6 +25,7 @@ private:
     void migrateTooltipToUserRole();
     void openPageByItemData(const QString &pageTitle, const QString &pageData);
     QWidget* createWidgetFromData(const QString &pageData);
+    QString dbConnect = "Sajet";
 };
 
 #endif // SAJETMAINWINDOW_H

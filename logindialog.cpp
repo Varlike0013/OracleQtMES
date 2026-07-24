@@ -108,6 +108,9 @@ void LoginDialog::on_btnConnect_clicked()
     mgr.setCurrentUser(user, pass, connInfo);
     // 6. 关闭测试连接（释放资源）
     oracleMgr.closeConnection(loginConnect);
+    // 7. 打开主数据连接connInfo
+    DbConnectionResult resultmain = oracleMgr.connectDatabase(connInfo,connInfo.key);
+    oracleMgr.setCurrentDbMain(connInfo.key);
 
     accept();  // 关闭对话框，返回 QDialog::Accepted
 }
