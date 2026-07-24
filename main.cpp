@@ -4,27 +4,23 @@
 #include "oracle_manager.h"
 #include "logindialog.h"  // 添加登录对话框的头文件
 
-
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
 #include <QLibrary>
-
-
+#include <QSettings>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
     // 1. 加载翻译文件（保持原有逻辑不变）
+    // 加载保存的语言设置
+    QSettings settings;
+    QString locale = settings.value("language", "zh_CN").toString();
     QTranslator translator;
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        const QString baseName = "OracleQtMES_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
-            a.installTranslator(&translator);
-            break;
-        }
+    if (translator.load(QString(":/i18n/OracleQtMES_%1.qm").arg(locale))) {
+        a.installTranslator(&translator);
     }
 
     // 2. 创建登录对话框（模态方式运行）

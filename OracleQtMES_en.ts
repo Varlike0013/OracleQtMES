@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh_CN" sourcelanguage="en">
+<TS version="2.1" language="en_US" sourcelanguage="en_US">
 <context>
     <name>GedtMainWindow</name>
     <message>
@@ -109,47 +109,47 @@
     <message>
         <location filename="logindialog.ui" line="14"/>
         <source>登录窗口</source>
-        <translation type="unfinished"></translation>
+        <translation>LoginDialog</translation>
     </message>
     <message>
         <location filename="logindialog.ui" line="54"/>
         <source>用户名：</source>
-        <translation type="unfinished"></translation>
+        <translation>UserName</translation>
     </message>
     <message>
         <location filename="logindialog.ui" line="64"/>
         <source>数据库：</source>
-        <translation type="unfinished"></translation>
+        <translation>Database</translation>
     </message>
     <message>
         <location filename="logindialog.ui" line="74"/>
         <source>密码：</source>
-        <translation type="unfinished"></translation>
+        <translation>Password</translation>
     </message>
     <message>
         <location filename="logindialog.ui" line="108"/>
         <source>登录</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="logindialog.ui" line="166"/>
-        <source>中文</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="logindialog.ui" line="171"/>
-        <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation>Login</translation>
     </message>
     <message>
         <location filename="logindialog.ui" line="142"/>
         <source>连接</source>
-        <translation type="unfinished"></translation>
+        <translation>Connect</translation>
     </message>
     <message>
         <location filename="logindialog.ui" line="149"/>
         <source>取消</source>
-        <translation type="unfinished"></translation>
+        <translation>Exit</translation>
+    </message>
+    <message>
+        <location filename="logindialog.ui" line="166"/>
+        <source>中文</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="logindialog.ui" line="171"/>
+        <source>English</source>
+        <translation></translation>
     </message>
 </context>
 <context>

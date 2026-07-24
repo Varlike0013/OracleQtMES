@@ -2,31 +2,30 @@ cmake_minimum_required(VERSION 3.19)
 project(OracleQtMES LANGUAGES CXX)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets LinguistTools Sql)
+set(CMAKE_AUTOUIC ON)
 
 qt_standard_project_setup()
 
 qt_add_executable(OracleQtMES
     WIN32 MACOSX_BUNDLE
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
-    logindialog.h logindialog.cpp logindialog.ui
-
+    mainwindow.cpp mainwindow.h mainwindow.ui
+    logindialog.cpp logindialog.h  logindialog.ui
     dbconfigmanager.h dbconfigmanager.cpp
     Oracle/oracle_sajet.cpp Oracle/oracle_sajet.h
     Oracle/oracle_dt.h Oracle/oracle_dt.cpp
     Oracle/oracle_manager.h Oracle/oracle_manager.cpp
     Sajet/sajetmainwindow.h Sajet/sajetmainwindow.cpp Sajet/sajetmainwindow.ui
     Gedt/gedtmainwindow.h Gedt/gedtmainwindow.cpp Gedt/gedtmainwindow.ui
+    Sajet/statustag.h Sajet/statustag.cpp Sajet/statustag.ui
 
 )
 
 qt_add_translations(
     TARGETS OracleQtMES
-    TS_FILES OracleQtMES_zh_CN.ts
+    TS_FILES OracleQtMES_zh_CN.ts OracleQtMES_en.ts
+    SOURCES ${UI_SOURCES}
 )
-
 target_link_libraries(OracleQtMES
     PRIVATE
         Qt::Core

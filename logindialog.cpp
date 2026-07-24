@@ -7,6 +7,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QStandardPaths>
+#include <QSettings>
 
 LoginDialog::LoginDialog(QWidget *parent)
     : QDialog(parent)
@@ -15,6 +16,17 @@ LoginDialog::LoginDialog(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("数据库登录");
     loadDatabaseConfigs();
+
+    // 读取保存的语言设置
+    QSettings settings;
+    QString defaultLocale = settings.value("language", "zh_CN").toString();
+    // 设置下拉框的当前索引
+    int index = ui->comboLanguage->findData(defaultLocale);
+    if (index == -1) {
+        index = ui->comboLanguage->findData("zh_CN"); // 如果找不到，默认中文
+    }
+    ui->comboLanguage->setCurrentIndex(index);
+    switchLanguage(defaultLocale); // 应用语言（注意：此时窗口尚未显示，但为了让翻译生效，先加载一次）
 }
 
 LoginDialog::~LoginDialog()
@@ -149,5 +161,30 @@ void LoginDialog::on_radioPassword_toggled(bool checked)
     } else {
         ui->editPassword->setEchoMode(QLineEdit::Password);
     }
+}
+void LoginDialog::on_comboLanguage_currentIndexChanged(int index)
+{
+    if (index < 0) return;
+    QString locale = ui->comboLanguage->currentText();
+    if (locale == "中文"){locale = "zh_CN";}
+    else if (locale == "English"){locale = "en";}
+    else {locale = "zh_CN";}
+    if (locale.isEmpty()) return;
+    switchLanguage(locale);
+}
+void LoginDialog::switchLanguage(const QString &locale)
+{
+    qApp->removeTranslator(&m_translator);
+    QString qmFile = QString(":/i18n/OracleQtMES_%1.qm").arg(locale);
+    if (m_translator.load(qmFile)) {
+        qApp->installTranslator(&m_translator);
+    } else {
+        if (m_translator.load(QString("translations/OracleQtMES_%1.qm").arg(locale))) {
+            qApp->installTranslator(&m_translator);
+        }
+    }
+    ui->retranslateUi(this);
+    QSettings settings;
+    settings.setValue("language", locale);
 }
 

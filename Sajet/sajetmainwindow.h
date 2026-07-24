@@ -2,6 +2,7 @@
 #define SAJETMAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTreeWidgetItem>
 
 namespace Ui {
 class SajetMainWindow;
@@ -20,6 +21,10 @@ private slots:
 
 private:
     Ui::SajetMainWindow *ui;
+    QMap<QString, int> m_pageTabMap; // 标识 -> tab 索引
+    void migrateTooltipToUserRole();
+    void openPageByItemData(const QString &pageTitle, const QString &pageData);
+    QWidget* createWidgetFromData(const QString &pageData);
 };
 
 #endif // SAJETMAINWINDOW_H

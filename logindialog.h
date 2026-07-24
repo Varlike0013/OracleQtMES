@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QSqlDatabase>
+#include <QTranslator>
+#include <QSettings>
 
 namespace Ui {
 class LoginDialog;
@@ -26,11 +28,15 @@ private slots:
     void on_btnCancel_clicked();
     void on_radioPassword_toggled(bool checked);
 
+    void on_comboLanguage_currentIndexChanged(int index);
+
 private:
     Ui::LoginDialog *ui;
     void loadDatabaseConfigs(); // 加载数据库配置列表
     QString loginConnect = "logined";
     bool validateUser(QSqlDatabase &db, const QString &username, const QString &password); //数据库验证用户是否存在
+    QTranslator m_translator;
+    void switchLanguage(const QString &locale);   // 切换语言的核心函数
 };
 
 #endif // LOGINDIALOG_H

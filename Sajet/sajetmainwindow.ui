@@ -240,95 +240,109 @@
         <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <widget class="QWidget" name="widget" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>300</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <property name="spacing">
-         <number>6</number>
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
         </property>
-        <item>
-         <widget class="QLineEdit" name="searchEdit">
-          <property name="placeholderText">
-           <string>输入关键字过滤...</string>
-          </property>
-          <property name="clearButtonEnabled">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTreeWidget" name="treeWidget">
-          <column>
-           <property name="text">
-            <string>系统功能索引</string>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="searchEdit">
+           <property name="placeholderText">
+            <string>输入关键字过滤...</string>
            </property>
-          </column>
-            <item>
-                <property name="text">
-                <string>P01系统基本信息</string>
-                </property>
-                <property name="expanded">
-                <bool>true</bool>
-                </property>
-                    <item>
-                    <property name="text"><string>员工</string></property>
-                    </item>
-                    <item>
-                    <property name="text"><string>途程</string></property>
-                    </item>
-            </item>
-            <item>
-                <property name="text">
-                <string>P02重工作业</string>
-                </property>
-                    <item>
-                    <property name="text">
-                        <string>清除料件</string>
-                    </property>
-                    </item>
-            </item>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-       <widget class="QWidget" name="widget_2" native="true">
-       <layout class="QVBoxLayout" name="tabLayout">
-        <item>
-         <widget class="QTabWidget" name="tabWidget">
-          <property name="tabsClosable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="tab">
-           <attribute name="title">
-            <string>页面</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="tabLayout_1">
-            <item>
-             <widget class="QLabel" name="welcomeLabel">
-              <property name="text">
-               <string>请点击左侧功能栏目</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
           </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+         </item>
+         <item>
+          <widget class="QTreeWidget" name="treeWidget">
+           <column>
+            <property name="text">
+             <string>系统功能索引</string>
+            </property>
+           </column>
+           <item>
+            <property name="text">
+             <string>P01系统基本信息</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>员工</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>途程</string>
+             </property>
+            </item>
+           </item>
+           <item>
+            <property name="text">
+             <string>P02重工作业</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>清除料件</string>
+             </property>
+            </item>
+           </item>
+           <item>
+            <property name="text">
+             <string>P03状态查询</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>状态一览表</string>
+             </property>
+             <property name="toolTip">
+              <string>StatusTag</string>
+             </property>
+            </item>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="widget_2" native="true">
+        <layout class="QVBoxLayout" name="tabLayout">
+         <item>
+          <widget class="QTabWidget" name="tabWidget">
+           <property name="tabsClosable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>页面</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="tabLayout_1">
+             <item>
+              <widget class="QLabel" name="welcomeLabel">
+               <property name="text">
+                <string>请点击左侧功能栏目</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
