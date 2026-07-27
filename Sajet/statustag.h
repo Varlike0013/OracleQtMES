@@ -23,6 +23,8 @@ private:
 
     void update_table_travel(QString serial_number);
     void update_table_parts(QString serial_number);
+    void update_status_label(QString serial_number);
+    void clearLabels(QString serial_number);
 };
 
 #endif // STATUSTAG_H

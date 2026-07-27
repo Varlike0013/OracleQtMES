@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>821</width>
-    <height>684</height>
+    <width>718</width>
+    <height>570</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,15 +18,18 @@
     <widget class="QFrame" name="frame_2">
      <property name="minimumSize">
       <size>
-       <width>50</width>
-       <height>50</height>
+       <width>700</width>
+       <height>80</height>
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::Shape::WinPanel</enum>
+      <enum>QFrame::Shape::Box</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Shadow::Sunken</enum>
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>5</number>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -45,6 +48,11 @@
         </property>
         <item>
          <widget class="QComboBox" name="comboBox_input">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
           <item>
            <property name="text">
             <string>序号</string>
@@ -117,21 +125,21 @@
     <widget class="QFrame" name="frame">
      <property name="minimumSize">
       <size>
-       <width>50</width>
-       <height>50</height>
+       <width>500</width>
+       <height>160</height>
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::Shape::WinPanel</enum>
+      <enum>QFrame::Shape::Box</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Shadow::Raised</enum>
      </property>
      <property name="lineWidth">
-      <number>3</number>
+      <number>8</number>
      </property>
      <property name="midLineWidth">
-      <number>2</number>
+      <number>0</number>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -156,6 +164,15 @@
             <height>0</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -178,6 +195,15 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -193,6 +219,15 @@
             <width>80</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
           </property>
           <property name="text">
            <string/>
@@ -210,6 +245,15 @@
             <height>0</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -220,6 +264,12 @@
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>序号：</string>
           </property>
@@ -235,6 +285,15 @@
             <width>80</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
           </property>
           <property name="text">
            <string/>
@@ -259,6 +318,12 @@
         </item>
         <item row="5" column="2">
          <widget class="QLabel" name="label_7">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>箱号：</string>
           </property>
@@ -268,7 +333,16 @@
          </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QLabel" name="label_">
+         <widget class="QLabel" name="label_csn">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -282,6 +356,15 @@
             <height>0</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -292,6 +375,12 @@
         </item>
         <item row="3" column="2">
          <widget class="QLabel" name="label_10">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Mac：</string>
           </property>
@@ -302,6 +391,12 @@
         </item>
         <item row="5" column="4">
          <widget class="QLabel" name="label_11">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>状态：</string>
           </property>
@@ -312,6 +407,12 @@
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_9">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>工单：</string>
           </property>
@@ -327,6 +428,15 @@
             <width>80</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
           </property>
           <property name="text">
            <string/>
@@ -344,6 +454,15 @@
             <height>0</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -357,6 +476,15 @@
             <height>0</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -364,6 +492,12 @@
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_13">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>料号：</string>
           </property>
@@ -374,6 +508,15 @@
         </item>
         <item row="0" column="1">
          <widget class="QLabel" name="Label_SN">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -384,6 +527,12 @@
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_15">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>料号描述：</string>
           </property>
@@ -394,6 +543,12 @@
         </item>
         <item row="2" column="4">
          <widget class="QLabel" name="label_17">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>下一站位：</string>
           </property>
@@ -404,6 +559,12 @@
         </item>
         <item row="3" column="4">
          <widget class="QLabel" name="label_6">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>CustmoSSN：</string>
           </property>
@@ -420,6 +581,15 @@
             <height>0</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(255, 0, 0);</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -430,6 +600,12 @@
         </item>
         <item row="5" column="0">
          <widget class="QLabel" name="label_3">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>出货序号：</string>
           </property>
@@ -440,6 +616,12 @@
         </item>
         <item row="0" column="4">
          <widget class="QLabel" name="label_5">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>流程名称：</string>
           </property>
@@ -450,6 +632,12 @@
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_2">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Qrcode：</string>
           </property>
@@ -465,8 +653,20 @@
    </item>
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="minimumSize">
+      <size>
+       <width>600</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_travel">
       <attribute name="title">

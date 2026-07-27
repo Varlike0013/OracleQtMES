@@ -14,15 +14,32 @@
    <string>SAJET MES</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">
+        QWidget#centralwidget {
+            background-color: #ececec;
+        }
+        QLineEdit,QTreeWidget,QHeaderView::section {
+            background-color: #e3eff5;
+            color: #192453;
+        }
+        </string>
+   </property>
    <layout class="QVBoxLayout" name="centralLayout">
     <item>
      <widget class="QSplitter" name="splitter_3">
       <property name="orientation">
        <enum>Qt::Orientation::Vertical</enum>
       </property>
+      <property name="handleWidth">
+       <number>0</number>
+      </property>
       <widget class="QSplitter" name="splitter_2">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="handleWidth">
+        <number>0</number>
        </property>
        <widget class="QWidget" name="widget_3" native="true">
         <property name="minimumSize">
@@ -236,8 +253,23 @@
        </widget>
       </widget>
       <widget class="QSplitter" name="splitter">
+       <property name="frameShape">
+        <enum>QFrame::Shape::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Shadow::Plain</enum>
+       </property>
+       <property name="lineWidth">
+        <number>1</number>
+       </property>
+       <property name="midLineWidth">
+        <number>0</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="handleWidth">
+        <number>0</number>
        </property>
        <widget class="QWidget" name="widget" native="true">
         <property name="minimumSize">
@@ -295,6 +327,14 @@
             <item>
              <property name="text">
               <string>清除料件</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>问题处理</string>
+             </property>
+             <property name="toolTip">
+              <string>ReworkQusetion</string>
              </property>
             </item>
            </item>

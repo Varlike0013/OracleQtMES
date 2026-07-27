@@ -12,12 +12,12 @@ qt_add_executable(OracleQtMES
     mainwindow.cpp mainwindow.h mainwindow.ui
     logindialog.cpp logindialog.h  logindialog.ui
     dbconfigmanager.h dbconfigmanager.cpp
-    Oracle/oracle_sajet.cpp Oracle/oracle_sajet.h
-    Oracle/oracle_dt.h Oracle/oracle_dt.cpp
-    Oracle/oracle_manager.h Oracle/oracle_manager.cpp
+    oracle_manager.h oracle_manager.cpp
+
     Sajet/sajetmainwindow.h Sajet/sajetmainwindow.cpp Sajet/sajetmainwindow.ui
     Gedt/gedtmainwindow.h Gedt/gedtmainwindow.cpp Gedt/gedtmainwindow.ui
     Sajet/statustag.h Sajet/statustag.cpp Sajet/statustag.ui
+    Sajet/reworkquestion.h Sajet/reworkquestion.cpp Sajet/reworkquestion.ui
 
 )
 
@@ -34,7 +34,6 @@ target_link_libraries(OracleQtMES
 )
 target_include_directories(OracleQtMES PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/oracle
     ${CMAKE_CURRENT_SOURCE_DIR}/Sajet
     ${CMAKE_CURRENT_SOURCE_DIR}/Gedt
 )

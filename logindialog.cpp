@@ -20,6 +20,13 @@ LoginDialog::LoginDialog(QWidget *parent)
     // 读取保存的语言设置
     QSettings settings;
     QString defaultLocale = settings.value("language", "zh_CN").toString();
+    QString lastDb = settings.value("lastDatabase").toString();
+    if (!lastDb.isEmpty()) {
+        int index = ui->comboDatabase->findData(lastDb);
+        if (index != -1) {
+            ui->comboDatabase->setCurrentIndex(index);
+        }
+    }
     // 设置下拉框的当前索引
     int index = ui->comboLanguage->findData(defaultLocale);
     if (index == -1) {
@@ -77,7 +84,11 @@ void LoginDialog::on_btnConnect_clicked()
     QString pass = ui->editPassword->text().trimmed();
 
     if (user.isEmpty() || pass.isEmpty()) {
-        QMessageBox::warning(this, "输入错误", "用户名和密码不能为空");
+        if (user.isEmpty()) {
+            ui->editUsername->setFocus();
+        } else {
+            ui->editPassword->setFocus();
+        }
         return;
     }
 
@@ -106,6 +117,14 @@ void LoginDialog::on_btnConnect_clicked()
     // 5. 连接成功，保存连接信息
     OracleManager& mgr = OracleManager::instance();
     mgr.setCurrentUser(user, pass, connInfo);
+    //QSettings保存dbcurrentindex
+    int index = ui->comboDatabase->currentIndex();
+    if ( index == -1) return;
+    QVariant data = ui->comboDatabase->itemData(index);
+    if (data.isValid()) {
+        QSettings settings;
+        settings.setValue("lastDatabase", data.toString());
+    }
     // 6. 关闭测试连接（释放资源）
     oracleMgr.closeConnection(loginConnect);
     // 7. 打开主数据连接connInfo
@@ -189,5 +208,13 @@ void LoginDialog::switchLanguage(const QString &locale)
     ui->retranslateUi(this);
     QSettings settings;
     settings.setValue("language", locale);
+}
+void LoginDialog::on_editUsername_returnPressed()
+{
+    ui->editPassword->setFocus();
+}
+void LoginDialog::on_editPassword_returnPressed()
+{
+    on_btnConnect_clicked();
 }
 

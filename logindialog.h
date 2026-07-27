@@ -27,8 +27,9 @@ private slots:
     void on_btnConnect_clicked();
     void on_btnCancel_clicked();
     void on_radioPassword_toggled(bool checked);
-
     void on_comboLanguage_currentIndexChanged(int index);
+    void on_editUsername_returnPressed();
+    void on_editPassword_returnPressed();
 
 private:
     Ui::LoginDialog *ui;

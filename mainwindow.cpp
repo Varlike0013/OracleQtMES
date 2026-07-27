@@ -195,8 +195,8 @@ void MainWindow::on_searchEdit_returnPressed()
         // 展开/折叠分类节点
         if (hasSearch) {    // 如果有可见子节点则展开，否则折叠
             category->setExpanded(hasVisibleChild(category));
-        } else {    // 无搜索时全部展开
-            category->setExpanded(true);
+        } else {    // 无搜索时全部折叠
+            category->setExpanded(false);
         }
     }
 }
