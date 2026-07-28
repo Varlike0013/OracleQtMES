@@ -334,7 +334,7 @@
               <string>问题处理</string>
              </property>
              <property name="toolTip">
-              <string>ReworkQusetion</string>
+              <string>ReworkQuestion</string>
              </property>
             </item>
            </item>
