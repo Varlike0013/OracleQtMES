@@ -25,5 +25,6 @@ private:
     void openPageByItemData(const QString &pageTitle, const QString &pageData);
     void setItemVisibility(QTreeWidgetItem *item, const QString &searchText, bool hasSearch);
     bool hasVisibleChild(QTreeWidgetItem *item);
+    void update_user_label();
 };
 #endif // SAJETMAINWINDOW_H

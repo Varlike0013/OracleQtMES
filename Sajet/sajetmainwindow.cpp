@@ -1,5 +1,7 @@
 #include <QMessageBox>
+#include <qsqlquery.h>
 #include "sajetmainwindow.h"
+#include "oracle_manager.h"
 #include "ui_sajetmainwindow.h"
 #include "statustag.h"
 #include "reworkquestion.h"
@@ -11,8 +13,8 @@ SajetMainWindow::SajetMainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->tabWidget->clear();
-
     migrateTooltipToUserRole();
+    update_user_label();
 }
 
 SajetMainWindow::~SajetMainWindow()
@@ -74,7 +76,7 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
     if (pageData == "StatusTag") {
         return new StatusTag(this); //返回对应的类
     }else if (pageData == "ReworkQuestion") {
-        return new ReworkQuestion(this); //返回对应的类
+        return new ReworkQuestion(this);
     }  else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;
@@ -147,4 +149,26 @@ bool SajetMainWindow::hasVisibleChild(QTreeWidgetItem *item)
         }
     }
     return false;
+}
+void SajetMainWindow::update_user_label()
+{
+    QString user = OracleManager::instance().getCurrentUsername();
+    if(user=="admin"){
+        ui->label_user->setText(tr("管理员"));
+    }else{
+        QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+        if (!db.isValid() || !db.isOpen()) {
+            ui->label_user->setText(user); // 连接无效，显示用户名
+            return;
+        }
+        QSqlQuery query(db);
+        query.prepare("SELECT EMP_NAME FROM SAJET.SYS_EMP WHERE EMP_NO = :emp_no");
+        query.bindValue(":emp_no", user);
+        if (query.exec() && query.next()) {
+            QString empName = query.value(0).toString();
+            ui->label_user->setText(empName);
+        } else {
+            ui->label_user->setText(user); // 查询失败或无结果，显示用户名
+        }
+    }
 }

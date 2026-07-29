@@ -90,7 +90,7 @@ def fetch_route_steps_necessary(route_name):
     try:
         with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
             with conn.cursor() as cursor:
-                # SQL：根据流程名称查询步骤，显示进程名称和是否必选，按步骤顺序排序
+                # SQL：根据流程名称查询步骤，显示进程名称按步骤顺序排序
                 sql = """
                     SELECT U.PROCESS_NAME
                     FROM SAJET.SYS_ROUTE_DETAIL D
@@ -110,28 +110,6 @@ def fetch_route_steps_necessary(route_name):
         return [], []
     except Exception as e:
         return [], []
-def check_route_exi(route_name):
-    """
-    根据流程名称获取该流程的所有步骤（进程名、是否必选）
-    :param route_name: 流程名称
-    :return: success
-    """
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                sql = """
-                    SELECT *
-                    FROM SAJET.SYS_ROUTE R
-                    WHERE R.ROUTE_NAME = :route_name 
-                """
-                cursor.execute(sql, route_name=route_name)
-                rows = cursor.fetchall()
-                columns = ["进程", "是否必过"]   # 显示列名
-                return columns, rows
-    except oracledb.Error as e:
-        return [], []
-    except Exception as e:
-        return [], []
 def get_route_sn(sn):
     """根据序列号获取其对应的流程ID和名称"""
     if not sn:
@@ -140,7 +118,7 @@ def get_route_sn(sn):
         SELECT ROUTE_ID, ROUTE_NAME
         FROM SAJET.SYS_ROUTE
         WHERE ROUTE_ID IN (
-            SELECT ROUTE_ID
+            SELECT DISTINCT ROUTE_ID
             FROM SAJET.G_SN_TRAVEL
             WHERE SERIAL_NUMBER = :sn
             GROUP BY ROUTE_ID

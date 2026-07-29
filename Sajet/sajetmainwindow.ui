@@ -196,6 +196,13 @@
               </property>
              </spacer>
             </item>
+            <item>
+             <widget class="QLabel" name="label_user">
+              <property name="text">
+               <string>User</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
