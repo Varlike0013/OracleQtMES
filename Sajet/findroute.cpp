@@ -93,10 +93,10 @@ void FindRoute::updateRouteTable(const QString &sn)
     ui->traveltableView->resizeColumnsToContents();
     ui->traveltableView->verticalHeader()->setVisible(false);
 }
-void FindRoute::on_btnQuery_clicked()
+void FindRoute::on_pushButtonselect_clicked()
 {
     if (!m_model) {
-        QMessageBox::warning(this, tr("提示"), tr("请先查询路线"));
+        QMessageBox::warning(this, tr("提示"), tr("请先查询流程"));
         return;
     }
 
@@ -112,18 +112,13 @@ void FindRoute::on_btnQuery_clicked()
         }
     }
 
-    if (selectedIds.isEmpty()) {
-        QMessageBox::warning(this, tr("提示"), tr("请至少选择一条路线"));
+    if (selectedIds.size()!=2) {
+        QMessageBox::warning(this, tr("提示"), tr("必须且只能选择两个流程"));
         return;
     }
 
     // 示例：根据选中的 ROUTE_ID 进行下一步查询（例如查询路线步骤）
     QString idList = selectedIds.join("','");
-    QString nextSql = QString("SELECT * FROM SAJET.SYS_ROUTE_STEP WHERE ROUTE_ID IN ('%1')").arg(idList);
-    qDebug() << "Next query SQL:" << nextSql;
-
-    // 可以打开新窗口或刷新当前表格显示新结果
-    QMessageBox::information(this, tr("信息"), tr("将查询路线步骤，选中的 ID: %1").arg(selectedIds.join(", ")));
-
-    // 实际使用时，可调用另一个函数执行 nextSql 并展示
+    qDebug()<<idList;
 }
+

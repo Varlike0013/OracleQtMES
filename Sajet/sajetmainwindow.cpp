@@ -5,6 +5,7 @@
 #include "ui_sajetmainwindow.h"
 #include "statustag.h"
 #include "reworkquestion.h"
+#include "findroute.h"
 
 
 SajetMainWindow::SajetMainWindow(QWidget *parent)
@@ -63,7 +64,6 @@ void SajetMainWindow::openPageByItemData(const QString &pageTitle, const QString
     // 使用新函数创建 Widget
     QWidget *pageWidget = createWidgetFromData(pageData);
     if (!pageWidget) {
-        // 可以在这里显示错误消息或创建默认页面
         return;
     }
 
@@ -77,6 +77,8 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
         return new StatusTag(this); //返回对应的类
     }else if (pageData == "ReworkQuestion") {
         return new ReworkQuestion(this);
+    }else if (pageData == "FindRoute") {
+        return new FindRoute(this);
     }  else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;
@@ -172,3 +174,17 @@ void SajetMainWindow::update_user_label()
         }
     }
 }
+void SajetMainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    QWidget *page = ui->tabWidget->widget(index);
+    if (page) {
+        // 从映射中移除
+        QString pageId = m_pageTabMap.key(index, QString());
+        if (!pageId.isEmpty()) {
+            m_pageTabMap.remove(pageId);
+        }
+        ui->tabWidget->removeTab(index);
+        delete page;
+    }
+}
+

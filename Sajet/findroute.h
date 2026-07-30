@@ -18,12 +18,12 @@ public:
 
 private slots:
     void on_snlineEdit_returnPressed();
+    void on_pushButtonselect_clicked();
 
 private:
     Ui::FindRoute *ui;
     QStandardItemModel *m_model = nullptr;
     void updateRouteTable(const QString &sn);
-    void on_btnQuery_clicked();   // 查询按钮槽
 };
 
 #endif // FINDROUTE_H

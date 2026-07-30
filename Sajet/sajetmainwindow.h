@@ -17,6 +17,8 @@ public:
 private slots:
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
     void on_searchEdit_returnPressed();
+    void on_tabWidget_tabCloseRequested(int index);
+
 private:
     Ui::SajetMainWindow *ui;
     QMap<QString, int> m_pageTabMap;         // 页面标识 → 标签页索引
