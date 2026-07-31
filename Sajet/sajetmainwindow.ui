@@ -352,6 +352,14 @@
               <string>FindRoute</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>清除卡号</string>
+             </property>
+             <property name="toolTip">
+              <string>ClearMac</string>
+             </property>
+            </item>
            </item>
            <item>
             <property name="text">

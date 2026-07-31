@@ -6,6 +6,7 @@
 #include "statustag.h"
 #include "reworkquestion.h"
 #include "findroute.h"
+#include "checkmac.h"
 
 
 SajetMainWindow::SajetMainWindow(QWidget *parent)
@@ -79,6 +80,8 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
         return new ReworkQuestion(this);
     }else if (pageData == "FindRoute") {
         return new FindRoute(this);
+    }else if (pageData == "CheckMac") {
+        return new CheckMac(this);
     }  else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;

@@ -19,6 +19,7 @@ qt_add_executable(OracleQtMES
     Sajet/statustag.h Sajet/statustag.cpp Sajet/statustag.ui
     Sajet/reworkquestion.h Sajet/reworkquestion.cpp Sajet/reworkquestion.ui
     Sajet/findroute.h Sajet/findroute.cpp Sajet/findroute.ui
+    Sajet/checkmac.h Sajet/checkmac.cpp Sajet/checkmac.ui
 
 )
 

@@ -13,9 +13,53 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QLineEdit" name="lineEditroute">
+       <property name="placeholderText">
+        <string>输入流程名模糊查询</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTreeWidget" name="treeWidget">
+       <column>
+        <property name="text">
+         <string>流程列表</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButtonselect">
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>查询重工流程</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonCheck">
+         <property name="text">
+          <string>查看流程</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item>
       <widget class="QLineEdit" name="snlineEdit">
        <property name="maximumSize">
@@ -33,6 +77,9 @@
        <property name="maxLength">
         <number>32767</number>
        </property>
+       <property name="placeholderText">
+        <string>输入SN</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -42,19 +89,6 @@
          <width>300</width>
          <height>16777215</height>
         </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButtonselect">
-       <property name="maximumSize">
-        <size>
-         <width>300</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>查询重工流程</string>
        </property>
       </widget>
      </item>
@@ -71,6 +105,13 @@
      </item>
      <item>
       <widget class="QListView" name="listView_old"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonadd">
+       <property name="text">
+        <string>添加为新流程</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
