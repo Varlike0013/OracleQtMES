@@ -357,7 +357,7 @@
               <string>清除卡号</string>
              </property>
              <property name="toolTip">
-              <string>ClearMac</string>
+              <string>CheckMac</string>
              </property>
             </item>
            </item>
@@ -374,6 +374,19 @@
              </property>
             </item>
            </item>
+           <item>
+            <property name="text">
+             <string>P04 程序</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>WEB接口调用</string>
+             </property>
+             <property name="toolTip">
+              <string>WebSoapTest</string>
+             </property>
+            </item>
+           </item>
           </widget>
          </item>
         </layout>
@@ -382,6 +395,12 @@
         <layout class="QVBoxLayout" name="tabLayout">
          <item>
           <widget class="QTabWidget" name="tabWidget">
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="tabsClosable">
             <bool>true</bool>
            </property>

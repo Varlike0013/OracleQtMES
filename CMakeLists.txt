@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.19)
 project(OracleQtMES LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets LinguistTools Sql)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Network)
 set(CMAKE_AUTOUIC ON)
 
 qt_standard_project_setup()
@@ -20,6 +20,8 @@ qt_add_executable(OracleQtMES
     Sajet/reworkquestion.h Sajet/reworkquestion.cpp Sajet/reworkquestion.ui
     Sajet/findroute.h Sajet/findroute.cpp Sajet/findroute.ui
     Sajet/checkmac.h Sajet/checkmac.cpp Sajet/checkmac.ui
+    Sajet/managersajet.h Sajet/managersajet.cpp
+    Sajet/websoaptest.h Sajet/websoaptest.cpp Sajet/websoaptest.ui
 
 )
 
@@ -33,6 +35,7 @@ target_link_libraries(OracleQtMES
         Qt::Core
         Qt::Widgets
         Qt6::Sql
+        Qt::Network
 )
 target_include_directories(OracleQtMES PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}

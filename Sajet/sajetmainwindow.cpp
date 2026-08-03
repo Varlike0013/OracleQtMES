@@ -7,6 +7,7 @@
 #include "reworkquestion.h"
 #include "findroute.h"
 #include "checkmac.h"
+#include "websoaptest.h"
 
 
 SajetMainWindow::SajetMainWindow(QWidget *parent)
@@ -82,7 +83,9 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
         return new FindRoute(this);
     }else if (pageData == "CheckMac") {
         return new CheckMac(this);
-    }  else {
+    }else if (pageData == "WebSoapTest") {
+        return new WebSoapTest(this);
+    }else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;
     }
