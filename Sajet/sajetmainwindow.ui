@@ -360,6 +360,14 @@
               <string>CheckMac</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>PCB二维码</string>
+             </property>
+             <property name="toolTip">
+              <string>PcbQrcode</string>
+             </property>
+            </item>
            </item>
            <item>
             <property name="text">
@@ -384,6 +392,14 @@
              </property>
              <property name="toolTip">
               <string>WebSoapTest</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>服务器IP</string>
+             </property>
+             <property name="toolTip">
+              <string>ServerIp</string>
              </property>
             </item>
            </item>

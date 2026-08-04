@@ -1,20 +1,19 @@
-#ifndef CHECKMAC_H
-#define CHECKMAC_H
+#ifndef PCBQRCODE_H
+#define PCBQRCODE_H
 
 #include <QWidget>
 
 namespace Ui {
-class CheckMac;
+class PcbQrcode;
 }
 
-class CheckMac : public QWidget
+class PcbQrcode : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit CheckMac(QWidget *parent = nullptr);
-    ~CheckMac();
-
+    explicit PcbQrcode(QWidget *parent = nullptr);
+    ~PcbQrcode();
     // 全局条件字典管理
     static void addCondition(const QString &key, const QString &value);
     static bool removeCondition(const QString &key, const QString &value);
@@ -22,16 +21,20 @@ public:
     static QStringList getConditionValues(const QString &key);
     static QMap<QString, QStringList> getAllConditions();
     static bool conditionExists(const QString &key, const QString &value);
-    void UpadteTableMacs();
+    void UpadteTableRow();
 
 private slots:
-    void on_lineEditInput_returnPressed();
-    void on_pushButton_clicked();
+    void on_lineEdit_returnPressed();
+    void on_pushButtonSelect_clicked();
+    void on_pushButtonClear_clicked();
+
     void on_pushButtonDelete_clicked();
 
+    void on_pushButtonAdd_clicked();
+
 private:
-    Ui::CheckMac *ui;
+    Ui::PcbQrcode *ui;
     static QMap<QString, QStringList> m_conditions;   // 全局条件字典
 };
 
-#endif // CHECKMAC_H
+#endif // PCBQRCODE_H

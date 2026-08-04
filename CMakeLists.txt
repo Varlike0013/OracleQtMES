@@ -22,6 +22,8 @@ qt_add_executable(OracleQtMES
     Sajet/checkmac.h Sajet/checkmac.cpp Sajet/checkmac.ui
     Sajet/managersajet.h Sajet/managersajet.cpp
     Sajet/websoaptest.h Sajet/websoaptest.cpp Sajet/websoaptest.ui
+    Sajet/serverip.h Sajet/serverip.cpp Sajet/serverip.ui
+    Sajet/pcbqrcode.h Sajet/pcbqrcode.cpp Sajet/pcbqrcode.ui
 
 )
 

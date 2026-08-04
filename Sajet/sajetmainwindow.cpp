@@ -8,6 +8,8 @@
 #include "findroute.h"
 #include "checkmac.h"
 #include "websoaptest.h"
+#include "serverip.h"
+#include "pcbqrcode.h"
 
 
 SajetMainWindow::SajetMainWindow(QWidget *parent)
@@ -85,6 +87,10 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
         return new CheckMac(this);
     }else if (pageData == "WebSoapTest") {
         return new WebSoapTest(this);
+    }else if (pageData == "ServerIp") {
+        return new ServerIp(this);
+    }else if (pageData == "PcbQrcode") {
+        return new PcbQrcode(this);
     }else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;
