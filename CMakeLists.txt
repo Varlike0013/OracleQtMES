@@ -24,6 +24,7 @@ qt_add_executable(OracleQtMES
     Sajet/websoaptest.h Sajet/websoaptest.cpp Sajet/websoaptest.ui
     Sajet/serverip.h Sajet/serverip.cpp Sajet/serverip.ui
     Sajet/pcbqrcode.h Sajet/pcbqrcode.cpp Sajet/pcbqrcode.ui
+    qmltest.qml
 
 )
 
