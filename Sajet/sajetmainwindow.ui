@@ -368,6 +368,14 @@
               <string>PcbQrcode</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>重工执行</string>
+             </property>
+             <property name="toolTip">
+              <string>ReworkForm</string>
+             </property>
+            </item>
            </item>
            <item>
             <property name="text">

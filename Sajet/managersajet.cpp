@@ -62,3 +62,90 @@ bool ManagerSajet::is_ReworkNo(const QString &rework)
 
     return false;
 }
+bool ManagerSajet::is_CartonNo(const QString &input)
+{
+    // 空串直接返回 false
+    if (input.isEmpty()) {
+        return false;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when checking CARTON_NO";
+        return false;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT COUNT(*) FROM SAJET.G_SN_STATUS WHERE CARTON_NO = :input");
+    query.bindValue(":input", input);
+
+    if (!query.exec()) {
+        qWarning() << "Query failed in is_CartonNo:" << query.lastError().text();
+        return false;
+    }
+
+    if (query.next()) {
+        int count = query.value(0).toInt();
+        return count > 0;
+    }
+
+    return false;
+}
+bool ManagerSajet::is_WorkOrderNo(const QString &input)
+{
+    // 空串直接返回 false
+    if (input.isEmpty()) {
+        return false;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when checking WORK_ORDER";
+        return false;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT COUNT(*) FROM SAJET.G_SN_STATUS WHERE WORK_ORDER = :input");
+    query.bindValue(":input", input);
+
+    if (!query.exec()) {
+        qWarning() << "Query failed in is_WorkOrderNo:" << query.lastError().text();
+        return false;
+    }
+
+    if (query.next()) {
+        int count = query.value(0).toInt();
+        return count > 0;
+    }
+
+    return false;
+}
+bool ManagerSajet::is_QcNo(const QString &input)
+{
+    // 空串直接返回 false
+    if (input.isEmpty()) {
+        return false;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when checking QC_NO";
+        return false;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT COUNT(*) FROM SAJET.G_SN_STATUS WHERE QC_NO = :input");
+    query.bindValue(":input", input);
+
+    if (!query.exec()) {
+        qWarning() << "Query failed in is_QcNo:" << query.lastError().text();
+        return false;
+    }
+
+    if (query.next()) {
+        int count = query.value(0).toInt();
+        return count > 0;
+    }
+
+    return false;
+}

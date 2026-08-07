@@ -10,6 +10,7 @@
 #include "websoaptest.h"
 #include "serverip.h"
 #include "pcbqrcode.h"
+#include "reworkform.h"
 
 
 SajetMainWindow::SajetMainWindow(QWidget *parent)
@@ -91,6 +92,8 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
         return new ServerIp(this);
     }else if (pageData == "PcbQrcode") {
         return new PcbQrcode(this);
+    }else if (pageData == "ReworkForm") {
+        return new ReworkForm(this);
     }else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;

@@ -25,6 +25,7 @@ qt_add_executable(OracleQtMES
     Sajet/serverip.h Sajet/serverip.cpp Sajet/serverip.ui
     Sajet/pcbqrcode.h Sajet/pcbqrcode.cpp Sajet/pcbqrcode.ui
     qmltest.qml
+    Sajet/reworkform.h Sajet/reworkform.cpp Sajet/reworkform.ui
 
 )
 
