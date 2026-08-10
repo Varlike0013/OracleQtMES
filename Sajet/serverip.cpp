@@ -4,6 +4,10 @@
 #include <qsqlquery.h>
 #include <QMessageBox>
 #include <qsqlquerymodel.h>
+#include "managersajet.h"
+#include <QFileDialog>
+#include <QFutureWatcher>
+#include <QStandardPaths>
 
 ServerIp::ServerIp(QWidget *parent)
     : QWidget(parent)
@@ -339,3 +343,36 @@ QString ServerIp::get_ip_status(QString serverId, QString gatewayId, int index)
 
     return result;
 }
+void ServerIp::on_pushButtonOut_clicked()
+{
+    // 检查是否已有导出任务正在运行
+    if (m_exportFuture.isRunning()) {
+        QMessageBox::warning(this, tr("提示"), tr("导出中，请等待导出结果"));
+        return;
+    }
+
+    // 设置默认路径：桌面 + 默认文件名
+    QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QString defaultFilePath = desktopPath + "/TGS_SERVER_IPS.csv";
+
+    QString filePath = QFileDialog::getSaveFileName(this, tr("导出 CSV"), defaultFilePath, tr("CSV 文件 (*.csv)"));
+    if (filePath.isEmpty()) return;
+
+    // 启动异步导出
+    m_exportFuture = ManagerSajet::exportGatewayData(filePath);
+
+    // 使用 QFutureWatcher 监听完成
+    QFutureWatcher<bool> *watcher = new QFutureWatcher<bool>(this);
+    connect(watcher, &QFutureWatcher<bool>::finished, this, [this, watcher, filePath]() {
+        bool success = watcher->result();
+        if (success) {
+            QMessageBox::information(this, tr("成功"), tr("导出完成: %1").arg(filePath));
+        } else {
+            QMessageBox::critical(this, tr("错误"), tr("导出失败，请查看日志"));
+        }
+        OracleManager::instance().closeConnection("ExportServerIp");
+        watcher->deleteLater();
+    });
+    watcher->setFuture(m_exportFuture);
+}
+

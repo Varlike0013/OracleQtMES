@@ -11,7 +11,9 @@
 #include "serverip.h"
 #include "pcbqrcode.h"
 #include "reworkform.h"
-
+#include "materialerp.h"
+#include "managersajet.h"
+#include "clearkeyparts.h"
 
 SajetMainWindow::SajetMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -21,6 +23,10 @@ SajetMainWindow::SajetMainWindow(QWidget *parent)
     ui->tabWidget->clear();
     migrateTooltipToUserRole();
     update_user_label();
+    // 初始化 watcher
+    m_erpWatcher = new QFutureWatcher<QString>(this);
+    connect(m_erpWatcher, &QFutureWatcher<QString>::finished,
+            this, &SajetMainWindow::ErpUpdateFinished);
 }
 
 SajetMainWindow::~SajetMainWindow()
@@ -94,6 +100,13 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
         return new PcbQrcode(this);
     }else if (pageData == "ReworkForm") {
         return new ReworkForm(this);
+    }else if (pageData == "MaterialErp") {
+        return new MaterialErp(this);
+    }else if (pageData == "UpdateAsusErp") {
+        UpdateAsusErp();
+        return nullptr;
+    }else if (pageData == "ClearKeyparts") {
+        return new ClearKeyparts(this);
     }else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;
@@ -202,4 +215,23 @@ void SajetMainWindow::on_tabWidget_tabCloseRequested(int index)
         delete page;
     }
 }
+void SajetMainWindow::UpdateAsusErp()
+{
+    if (m_erpWatcher->isRunning()) {
+        QMessageBox::warning(this, tr("提示"), tr("更新任务正在执行，请稍候"));
+        return;
+    }
+    QFuture<QString> future = ManagerSajet::updateErpData();
+    m_erpWatcher->setFuture(future);
+}
 
+void SajetMainWindow::ErpUpdateFinished()
+{
+    QString result = m_erpWatcher->result();
+    if (result == "OK") {
+        QMessageBox::information(this, tr("成功"), tr("ERP数据更新成功"));
+    } else {
+        QMessageBox::critical(this, tr("错误"), tr("更新失败: %1").arg(result));
+    }
+    OracleManager::instance().closeConnection("UpdateAsusErp");
+}

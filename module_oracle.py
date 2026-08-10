@@ -96,42 +96,6 @@ def copy_route_new(old_route,new_route,emp,is_overwrite=False):
         return f"数据库错误: {e}"
     except Exception as e:
         return f"异常: {e}"
-def fetch_sn_keyparts(sn):
-    """
-    根据给定的 SN 条件查询 G_SN_KEYPARTS 表。
-    :param SN: SERIAL_NUMBER
-    :return: (msg, columns, rows)
-    """
-    if not sn:
-        return "SN 不能为空", [], []
-    sql = """
-        SELECT K.WORK_ORDER,
-               K.SERIAL_NUMBER,
-               P.PROCESS_NAME,
-               PA.PART_NO,
-               PA.PART_TYPE,
-               K.ITEM_PART_SN,
-               K.ITEM_GROUP,
-               K.VERSION,
-               E.EMP_NAME,
-               K.UPDATE_TIME
-        FROM SAJET.G_SN_KEYPARTS K
-        LEFT JOIN SAJET.SYS_PROCESS P ON P.PROCESS_ID = K.PROCESS_ID
-        LEFT JOIN SAJET.SYS_PART PA ON PA.PART_ID = K.ITEM_PART_ID
-        LEFT JOIN SAJET.SYS_EMP E ON E.EMP_ID = K.UPDATE_USERID
-        WHERE K.SERIAL_NUMBER = :sn
-    """
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(sql, sn=sn)
-                rows = cursor.fetchall()
-                columns = [desc[0] for desc in cursor.description] if rows else []
-                return "OK", columns, rows
-    except oracledb.Error as e:
-        return f"数据库错误: {e}", [], []
-    except Exception as e:
-        return f"异常: {e}", [], []
 def insert_ht_sn_keypart(sn, part, time):
     """
     将 G_SN_KEYPARTS 中指定 SN、料件SN和更新时间匹配的记录插入到历史表 G_HT_SN_KEYPARTS。
@@ -252,46 +216,6 @@ def delete_sn_keyparts(sn):
         return f"数据库错误: {e}"
     except Exception as e:
         return f"异常: {e}"
-def fetch_carton_keyparts(carton):
-    """
-    根据箱号查询所有关联 SN 的关键部件信息。
-    :param carton: 箱号
-    :return: (msg, columns, rows)
-             msg: 'OK' 或错误信息
-             columns: 列名列表
-             rows: 数据行列表
-    """
-    if not carton:
-        return "箱号不能为空", [], []
-
-    sql = """
-        SELECT K.WORK_ORDER,
-               K.SERIAL_NUMBER,
-               P.PROCESS_NAME,
-               PA.PART_NO,
-               PA.PART_TYPE,
-               K.ITEM_PART_SN,
-               K.ITEM_GROUP,
-               K.VERSION,
-               E.EMP_NAME,
-               K.UPDATE_TIME
-        FROM SAJET.G_SN_KEYPARTS K
-        LEFT JOIN SAJET.SYS_PROCESS P ON P.PROCESS_ID = K.PROCESS_ID
-        LEFT JOIN SAJET.SYS_PART PA ON PA.PART_ID = K.ITEM_PART_ID
-        LEFT JOIN SAJET.SYS_EMP E ON E.EMP_ID = K.UPDATE_USERID
-        WHERE K.SERIAL_NUMBER IN (SELECT S.SERIAL_NUMBER FROM SAJET.G_SN_STATUS S WHERE S.CARTON_NO = :carton)
-    """
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(sql, carton=carton)
-                rows = cursor.fetchall()
-                columns = [desc[0] for desc in cursor.description] if rows else []
-                return "OK", columns, rows
-    except oracledb.Error as e:
-        return f"数据库错误: {e}", [], []
-    except Exception as e:
-        return f"异常: {e}", [], []
 def delete_keyparts_wo_process(wo, process, list_sn):
     """
     删除指定工单、站位下所有 SN 的记录。
@@ -366,106 +290,6 @@ def insert_ht_keyarts_wo_process(wo, process, list_sn):
                     return "OK"
                 else:
                     return "未找到匹配的记录，备份失败"
-    except oracledb.Error as e:
-        return f"数据库错误: {e}"
-    except Exception as e:
-        return f"异常: {e}"
-def fetch_keyparts_rework(rewk):
-    """
-    根据重工号查询所有关联 SN 的关键部件信息。
-    :param rewk: 重工号
-    :return: (msg, columns, rows)
-             msg: 'OK' 或错误信息
-             columns: 列名列表
-             rows: 数据行列表
-    """
-    if not rewk:
-        return "重工号不能为空", [], []
-
-    sql = """
-         SELECT K.WORK_ORDER,
-               K.SERIAL_NUMBER,
-               P.PROCESS_NAME,
-               PA.PART_NO,
-               PA.PART_TYPE,
-               K.ITEM_PART_SN,
-               K.ITEM_GROUP,
-               K.VERSION,
-               E.EMP_NAME,
-               K.UPDATE_TIME
-        FROM SAJET.G_SN_KEYPARTS K
-        LEFT JOIN SAJET.SYS_PROCESS P ON P.PROCESS_ID = K.PROCESS_ID
-        LEFT JOIN SAJET.SYS_PART PA ON PA.PART_ID = K.ITEM_PART_ID
-        LEFT JOIN SAJET.SYS_EMP E ON E.EMP_ID = K.UPDATE_USERID
-        WHERE K.SERIAL_NUMBER IN (SELECT S.SERIAL_NUMBER FROM SAJET.G_SN_STATUS S WHERE S.REWORK_NO = :rewk)
-    """
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(sql, rewk=rewk)
-                rows = cursor.fetchall()
-                columns = [desc[0] for desc in cursor.description] if rows else []
-                return "OK", columns, rows
-    except oracledb.Error as e:
-        return f"数据库错误: {e}", [], []
-    except Exception as e:
-        return f"异常: {e}", [], []
-def update_ppid_sn(sn, ppid, new_sn):
-    """
-    更新 ECS_PPID_PCB_CODE 表中的 STRSMTSN 字段。
-    :param sn:      原 STRSMTSN
-    :param ppid:    原 PCB_QRCODE
-    :param new_sn:  新 STRSMTSN
-    :return: 'OK' 或错误信息
-    """
-    if not sn or not ppid or not new_sn:
-        return "原 SN、PPID 和新 SN 均不能为空"
-
-    sql = """
-        UPDATE SAJET.ECS_PPID_PCB_CODE P
-        SET P.STRSMTSN = :new_sn
-        WHERE P.STRSMTSN = :sn AND P.PCB_QRCODE = :ppid
-    """
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(sql, new_sn=new_sn, sn=sn, ppid=ppid)
-                rowcount = cursor.rowcount
-                conn.commit()
-                if rowcount > 0:
-                    return "OK"
-                else:
-                    return "未找到匹配的记录，更新失败"
-    except oracledb.Error as e:
-        return f"数据库错误: {e}"
-    except Exception as e:
-        return f"异常: {e}"
-def update_ppid_pcb(sn, ppid, new_ppid):
-    """
-    更新 ECS_PPID_PCB_CODE 表中的 PCB_QRCODE 字段。
-    :param sn:       原 STRSMTSN
-    :param ppid:     原 PCB_QRCODE
-    :param new_ppid: 新 PCB_QRCODE
-    :return: 'OK' 或错误信息
-    """
-    if not sn or not ppid or not new_ppid:
-        return "原 SN、PPID 和新 PPID 均不能为空"
-
-    sql = """
-        UPDATE SAJET.ECS_PPID_PCB_CODE P
-        SET P.PCB_QRCODE = :new_ppid
-        WHERE P.STRSMTSN = :sn AND P.PCB_QRCODE = :ppid
-    """
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(sql, new_ppid=new_ppid, sn=sn, ppid=ppid)
-                rowcount = cursor.rowcount
-                conn.commit()
-                if rowcount > 0:
-                    return "OK"
-                else:
-                    return "未找到匹配的记录，更新失败"
     except oracledb.Error as e:
         return f"数据库错误: {e}"
     except Exception as e:
@@ -751,21 +575,6 @@ def delete_lenovo_carton_sn(carton):
         return f"数据库错误: {e}"
     except Exception as e:
         return f"异常: {e}"
-def update_erp_asus():
-    """
-    执行存储过程 SAJET.erp_to_sfis_asus（无参数）。
-    :return: 'OK' 或错误信息字符串
-    """
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                cursor.callproc("SAJET.erp_to_sfis_asus")
-                conn.commit()
-                return "OK"
-    except oracledb.Error as e:
-        return f"数据库错误: {e}"
-    except Exception as e:
-        return f"异常: {e}"
 def insert_user_action(user_no, user_action, target=None, status=None, ip_address=None):
     """
     调用存储过程 SAJET.INSERT_VARLIKE_ACTION_LOG 插入用户操作日志。
@@ -788,57 +597,6 @@ def insert_user_action(user_no, user_action, target=None, status=None, ip_addres
                 )
                 conn.commit()
                 result = tres_var.getvalue()
-                return result
-    except oracledb.Error as e:
-        return f"数据库错误: {e}"
-    except Exception as e:
-        return f"异常: {e}"
-def fetch_erp_material(wo):
-    """
-    根据工单号查询 ERP 物料信息。
-    :param wo: 工单号
-    :return: (msg, columns, rows)
-             msg: 'OK' 或错误信息
-             columns: 列名列表
-             rows: 数据行列表
-    """
-    if not wo:
-        return "输入不能为空", [], []
-
-    sql = "SELECT * FROM SAJET.ERP_WO_MATERIAL WHERE WORK_ORDER = :wo"
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(sql, wo=wo)
-                rows = cursor.fetchall()
-                columns = [desc[0] for desc in cursor.description] if rows else []
-                return "OK", columns, rows
-    except oracledb.Error as e:
-        return f"数据库错误: {e}", [], []
-    except Exception as e:
-        return f"异常: {e}", [], []
-def insert_erp_material(wo_part, ecs_part, decs, kpart):
-    """
-    调用存储过程 SAJET.INSERT_WO_MATERIA 插入 ERP 物料信息。
-    :param wo_part:  工单号或料号（用于校验）
-    :param ecs_part: ECS 料号
-    :param decs:     ECS 描述
-    :param kpart:    关键件号
-    :return: 'OK' 或错误信息字符串
-    """
-    if not wo_part or not decs or not kpart:
-        return "参数不完整：工单/料号、描述、关键件号均不能为空"
-
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                result_var = cursor.var(oracledb.DB_TYPE_VARCHAR)
-                cursor.callproc(
-                    "SAJET.INSERT_WO_MATERIA",
-                    [wo_part, ecs_part, decs, kpart, result_var]
-                )
-                conn.commit()
-                result = result_var.getvalue()
                 return result
     except oracledb.Error as e:
         return f"数据库错误: {e}"

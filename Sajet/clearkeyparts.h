@@ -1,19 +1,19 @@
-#ifndef PCBQRCODE_H
-#define PCBQRCODE_H
+#ifndef CLEARKEYPARTS_H
+#define CLEARKEYPARTS_H
 
 #include <QWidget>
 
 namespace Ui {
-class PcbQrcode;
+class ClearKeyparts;
 }
 
-class PcbQrcode : public QWidget
+class ClearKeyparts : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit PcbQrcode(QWidget *parent = nullptr);
-    ~PcbQrcode();
+    explicit ClearKeyparts(QWidget *parent = nullptr);
+    ~ClearKeyparts();
     // 全局条件字典管理
     static void addCondition(const QString &key, const QString &value);
     static bool removeCondition(const QString &key, const QString &value);
@@ -24,17 +24,14 @@ public:
     void UpadteTableRow();
 
 private slots:
-    void on_lineEdit_returnPressed();
+    void on_lineEditInput_returnPressed();
     void on_pushButtonSelect_clicked();
+
     void on_pushButtonClear_clicked();
-    void on_pushButtonDelete_clicked();
-    void on_pushButtonAdd_clicked();
-    void on_tableView_clicked(const QModelIndex &index);
-    void on_pushButtonUpdate_clicked();
 
 private:
-    Ui::PcbQrcode *ui;
+    Ui::ClearKeyparts *ui;
     static QMap<QString, QStringList> m_conditions;   // 全局条件字典
 };
 
-#endif // PCBQRCODE_H
+#endif // CLEARKEYPARTS_H

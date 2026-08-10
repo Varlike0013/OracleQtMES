@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTreeWidgetItem>
+#include <QFutureWatcher>
 
 namespace Ui { class SajetMainWindow; }
 
@@ -28,5 +29,8 @@ private:
     void setItemVisibility(QTreeWidgetItem *item, const QString &searchText, bool hasSearch);
     bool hasVisibleChild(QTreeWidgetItem *item);
     void update_user_label();
+    void UpdateAsusErp();
+    void ErpUpdateFinished();
+    QFutureWatcher<QString> *m_erpWatcher;
 };
 #endif // SAJETMAINWINDOW_H

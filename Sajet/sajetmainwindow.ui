@@ -222,14 +222,14 @@
             <item>
              <widget class="QPushButton" name="tabBtn1">
               <property name="text">
-               <string>功能1</string>
+               <string>系统降级</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="tabBtn2">
               <property name="text">
-               <string>功能2</string>
+               <string>登出</string>
               </property>
              </widget>
             </item>
@@ -326,6 +326,14 @@
               <string>途程</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>ERP工单料件</string>
+             </property>
+             <property name="toolTip">
+              <string>MaterialErp</string>
+             </property>
+            </item>
            </item>
            <item>
             <property name="text">
@@ -334,6 +342,9 @@
             <item>
              <property name="text">
               <string>清除料件</string>
+             </property>
+             <property name="toolTip">
+              <string>ClearKeyparts</string>
              </property>
             </item>
             <item>
@@ -408,6 +419,14 @@
              </property>
              <property name="toolTip">
               <string>ServerIp</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>更新ASUS列印</string>
+             </property>
+             <property name="toolTip">
+              <string>UpdateAsusErp</string>
              </property>
             </item>
            </item>

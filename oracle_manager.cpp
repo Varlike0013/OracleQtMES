@@ -19,7 +19,7 @@ OracleManager& OracleManager::instance()
 OracleManager::OracleManager(QObject *parent)
     : QObject(parent)
 {
-    qDebug() << "OracleManager 初始化";
+    qDebug() << "OracleManager Initialize";
 }
 
 OracleManager::~OracleManager()
@@ -49,7 +49,7 @@ DbConnectionResult OracleManager::connectDatabase(const DbConnectionInfo &connIn
     // 3. 尝试连接
     if (!db.open()) {
         result.errorMessage = db.lastError().text();
-        qWarning() << "数据库连接失败:" << result.errorMessage;
+        qWarning() << "Failed to connect to the database:" << result.errorMessage;
         // 确保关闭并移除
         if (db.isOpen()) {
             db.close();
@@ -66,7 +66,7 @@ DbConnectionResult OracleManager::connectDatabase(const DbConnectionInfo &connIn
     if (!m_openConnections.contains(connectname)) {
         m_openConnections.append(connectname);
     }
-    qDebug() << "数据库连接成功! 主机:" << connInfo.host << "服务名:" << connInfo.serviceName;
+    qDebug() << "Database connection successful! Host:" << connInfo.host << "Service Name:" << connInfo.serviceName;
     return result;
 }
 
@@ -80,7 +80,7 @@ void OracleManager::closeConnection(const QString &connectname)
         }
         QSqlDatabase::removeDatabase(connectname);
         m_openConnections.removeOne(connectname);
-        qDebug() <<connectname<< "连接已关闭";
+        qDebug() <<connectname<< "Connection closed";
     }
 }
 void OracleManager::setCurrentUser(const QString &username, const QString &password, const DbConnectionInfo &info)
@@ -142,5 +142,5 @@ void OracleManager::disconnectAll()
     }
     // 确保列表清空（closeConnection 应该已经移除所有，但以防万一）
     m_openConnections.clear();
-    qDebug() << "所有数据库连接已关闭";
+    qDebug() << "All database connections have been closed";
 }

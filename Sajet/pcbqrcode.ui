@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>626</width>
-    <height>509</height>
+    <width>867</width>
+    <height>630</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -109,6 +109,87 @@
             <string>值</string>
            </property>
           </column>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="frame_2">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>ECS料件号</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>PCB序号</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEditEcsPartNo"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineEditPcbCustPn"/>
+           </item>
+           <item row="5" column="1">
+            <widget class="QPushButton" name="pushButtonUpdate">
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>修改</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>PCB客户料号</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>序列号</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>PCB二维码</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="lineEditPcbSn"/>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="lineEditStrSmtsn"/>
+           </item>
+           <item row="4" column="1">
+            <widget class="QLineEdit" name="lineEditPcbQrcode"/>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>

@@ -137,14 +137,14 @@ bool DbConfigManager::saveConfig(const QString &filePath)
     QDir dir = fileInfo.absoluteDir();
     if (!dir.exists()) {
         if (!dir.mkpath(".")) {
-            qWarning() << "无法创建配置目录:" << dir.path();
+            qWarning() << "Can't create config directory:" << dir.path();
             return false;
         }
     }
 
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qWarning() << "无法写入配置文件:" << path;
+        qWarning() << "Can't write to the config file:" << path;
         return false;
     }
 
@@ -153,7 +153,7 @@ bool DbConfigManager::saveConfig(const QString &filePath)
     file.write(doc.toJson(QJsonDocument::Indented));  // 格式化输出，便于阅读
     file.close();
 
-    qDebug() << "配置文件已保存:" << path;
+    qDebug() << "The configuration file has been saved:" << path;
     return true;
 }
 
@@ -200,7 +200,7 @@ bool DbConfigManager::fromJson(const QJsonObject &root)
         if (info.isValid()) {
             m_configs[key] = info;
         } else {
-            qWarning() << "跳过无效配置:" << key;
+            qWarning() << "Skip invalid configuration:" << key;
         }
     }
     m_loaded = true;

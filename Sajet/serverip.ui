@@ -48,6 +48,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="pushButtonOut">
+          <property name="text">
+           <string>导出IP</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>

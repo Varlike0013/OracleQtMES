@@ -423,4 +423,74 @@ void PcbQrcode::on_pushButtonAdd_clicked()
 
     QMessageBox::information(this, tr("成功"), tr("记录已添加"));
 }
+void PcbQrcode::on_tableView_clicked(const QModelIndex &index)
+{
+    if (!index.isValid()) return;
+
+    QAbstractItemModel *model = ui->tableView->model();
+    if (!model) return;
+
+    int row = index.row();
+    // 列顺序：0-ECS零件号, 1-PCB客户PN, 2-PCB SN, 3-STR SMTSN, 4-PCB二维码, 5-创建时间
+    QString ecsPartNo = model->data(model->index(row, 0)).toString();
+    QString pcbCustPn = model->data(model->index(row, 1)).toString();
+    QString pcbSn = model->data(model->index(row, 2)).toString();
+    QString strSmtsn = model->data(model->index(row, 3)).toString();
+    QString pcbQrcode = model->data(model->index(row, 4)).toString();
+    // 不读取创建时间（列5）
+
+    // 填入对应的 QLineEdit（根据您的控件名称调整）
+    ui->lineEditEcsPartNo->setText(ecsPartNo);
+    ui->lineEditPcbCustPn->setText(pcbCustPn);
+    ui->lineEditPcbSn->setText(pcbSn);
+    ui->lineEditStrSmtsn->setText(strSmtsn);
+    ui->lineEditPcbQrcode->setText(pcbQrcode);
+}
+
+void PcbQrcode::on_pushButtonUpdate_clicked()
+{
+
+    QString ecsPartNo = ui->lineEditEcsPartNo->text().trimmed();
+    QString pcbCustPn = ui->lineEditPcbCustPn->text().trimmed();
+    QString pcbSn = ui->lineEditPcbSn->text().trimmed();
+    QString strSmtsn = ui->lineEditStrSmtsn->text().trimmed();
+    QString pcbQrcode = ui->lineEditPcbQrcode->text().trimmed();
+
+    if (strSmtsn.isEmpty() || pcbQrcode.isEmpty()) {
+        QMessageBox::warning(this, tr("输入错误"), tr("STR SMTSN 和 PCB 二维码不能为空"));
+        return;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        QMessageBox::critical(this, tr("错误"), tr("数据库连接无效"));
+        return;
+    }
+
+    // 5. 构建更新语句（使用主键条件，保留原创建时间）
+    QString sql = "UPDATE SAJET.ECS_PPID_PCB_CODE "
+                  "SET ECS_PART_NO = :ecs, PCB_CUST_PN = :cust, PCB_SN = :sn, PCB_QRCODE = :qrcode "
+                  "WHERE STR SMTSN = :str";
+    QSqlQuery query(db);
+    query.prepare(sql);
+    query.bindValue(":ecs", ecsPartNo);
+    query.bindValue(":cust", pcbCustPn);
+    query.bindValue(":sn", pcbSn);
+    query.bindValue(":str", strSmtsn);
+    query.bindValue(":qrcode", pcbQrcode);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, tr("错误"), tr("更新失败: %1").arg(query.lastError().text()));
+        return;
+    }
+
+    int affected = query.numRowsAffected();
+    if (affected == 0) {
+        QMessageBox::warning(this, tr("提示"), tr("未找到匹配的记录，可能已被修改或删除"));
+        return;
+    }
+    QMessageBox::information(this, tr("成功"), tr("已更新 %1 条记录").arg(affected));
+
+    UpadteTableRow(); // 更新表格
+}
 

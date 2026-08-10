@@ -13,7 +13,6 @@ qt_add_executable(OracleQtMES
     logindialog.cpp logindialog.h  logindialog.ui
     dbconfigmanager.h dbconfigmanager.cpp
     oracle_manager.h oracle_manager.cpp
-
     Sajet/sajetmainwindow.h Sajet/sajetmainwindow.cpp Sajet/sajetmainwindow.ui
     Gedt/gedtmainwindow.h Gedt/gedtmainwindow.cpp Gedt/gedtmainwindow.ui
     Sajet/statustag.h Sajet/statustag.cpp Sajet/statustag.ui
@@ -24,8 +23,9 @@ qt_add_executable(OracleQtMES
     Sajet/websoaptest.h Sajet/websoaptest.cpp Sajet/websoaptest.ui
     Sajet/serverip.h Sajet/serverip.cpp Sajet/serverip.ui
     Sajet/pcbqrcode.h Sajet/pcbqrcode.cpp Sajet/pcbqrcode.ui
-    qmltest.qml
     Sajet/reworkform.h Sajet/reworkform.cpp Sajet/reworkform.ui
+    Sajet/materialerp.h Sajet/materialerp.cpp Sajet/materialerp.ui
+    Sajet/clearkeyparts.h Sajet/clearkeyparts.cpp Sajet/clearkeyparts.ui
 
 )
 
