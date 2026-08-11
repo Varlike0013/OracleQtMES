@@ -29,6 +29,8 @@ private slots:
 
     void on_pushButtonClear_clicked();
 
+    void on_pushButtonDelete_clicked();
+
 private:
     Ui::ClearKeyparts *ui;
     static QMap<QString, QStringList> m_conditions;   // 全局条件字典

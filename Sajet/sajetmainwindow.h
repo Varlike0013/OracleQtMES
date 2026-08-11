@@ -19,6 +19,8 @@ private slots:
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
     void on_searchEdit_returnPressed();
     void on_tabWidget_tabCloseRequested(int index);
+    void on_pushButtonLogout_clicked();
+    void on_pushButtonSysdown_clicked();
 
 private:
     Ui::SajetMainWindow *ui;

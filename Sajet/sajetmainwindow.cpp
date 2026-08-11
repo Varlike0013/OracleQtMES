@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include "mainwindow.h"
 #include <qsqlquery.h>
 #include "sajetmainwindow.h"
 #include "oracle_manager.h"
@@ -234,4 +235,24 @@ void SajetMainWindow::ErpUpdateFinished()
         QMessageBox::critical(this, tr("错误"), tr("更新失败: %1").arg(result));
     }
     OracleManager::instance().closeConnection("UpdateAsusErp");
+}
+
+void SajetMainWindow::on_pushButtonLogout_clicked()
+{
+    int reply = QMessageBox::question(this, tr("确认退出吗"),
+                                      tr("确定要退出程序吗吗？"),
+                                      QMessageBox::Yes | QMessageBox::No);
+    if (reply != QMessageBox::Yes) return;
+    QApplication::quit();
+}
+void SajetMainWindow::on_pushButtonSysdown_clicked()
+{
+    int reply = QMessageBox::question(this, tr("确认降级"),
+                                      tr("确定要切换到通用主界面吗？"),
+                                      QMessageBox::Yes | QMessageBox::No);
+    if (reply != QMessageBox::Yes) return;
+    this->hide();
+    MainWindow *newWindow = new MainWindow;
+    newWindow->show();
+    this->deleteLater();
 }

@@ -220,14 +220,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="tabBtn1">
+             <widget class="QPushButton" name="pushButtonSysdown">
               <property name="text">
                <string>系统降级</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="tabBtn2">
+             <widget class="QPushButton" name="pushButtonLogout">
               <property name="text">
                <string>登出</string>
               </property>
