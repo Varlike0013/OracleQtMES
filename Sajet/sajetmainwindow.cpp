@@ -15,6 +15,8 @@
 #include "materialerp.h"
 #include "managersajet.h"
 #include "clearkeyparts.h"
+#include "checkroute.h"
+#include "workorderinfo.h"
 
 SajetMainWindow::SajetMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -108,6 +110,10 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
         return nullptr;
     }else if (pageData == "ClearKeyparts") {
         return new ClearKeyparts(this);
+    }else if (pageData == "CheckRoute") {
+        return new CheckRoute(this);
+    }else if (pageData == "WorkOrderInfo") {
+        return new WorkOrderInfo(this);
     }else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;
@@ -234,6 +240,7 @@ void SajetMainWindow::ErpUpdateFinished()
     } else {
         QMessageBox::critical(this, tr("错误"), tr("更新失败: %1").arg(result));
     }
+    ManagerSajet::insert_user_action("UpdateAsusErp",result);
     OracleManager::instance().closeConnection("UpdateAsusErp");
 }
 

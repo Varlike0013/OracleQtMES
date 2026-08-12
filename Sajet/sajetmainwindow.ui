@@ -325,6 +325,9 @@
              <property name="text">
               <string>途程</string>
              </property>
+             <property name="toolTip">
+              <string>CheckRoute</string>
+             </property>
             </item>
             <item>
              <property name="text">
@@ -332,6 +335,14 @@
              </property>
              <property name="toolTip">
               <string>MaterialErp</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>工单维护</string>
+             </property>
+             <property name="toolTip">
+              <string>WorkOrderInfo</string>
              </property>
             </item>
            </item>

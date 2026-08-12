@@ -6,11 +6,60 @@
 #include <QRegularExpression>
 #include <QtConcurrent/QtConcurrent>
 #include <QCollator>
+#include <QHostAddress>
+#include <QNetworkInterface>
 #include <algorithm>
 
 ManagerSajet::ManagerSajet() {}
 
 
+QString ManagerSajet::insert_user_action(const QString &user_action,
+                                         const QString &status,
+                                         const QString &target)
+{
+    QString user_no = OracleManager::instance().getCurrentUsername();
+    if (user_no.isEmpty() || user_action.isEmpty()) {
+        return "工号和操作类型不能为空";
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        return "数据库连接无效";
+    }
+
+    // 获取本机 IP 地址
+    QString ipAddress = getLocalIP();
+
+    // 调用存储过程
+    QSqlQuery query(db);
+    QString result;
+    result.reserve(100);
+    query.prepare("BEGIN SAJET.INSERT_VARLIKE_ACTION_LOG(:user_no, :user_action, :target, :status, :ip, :result); END;");
+    query.bindValue(":user_no", user_no);
+    query.bindValue(":user_action", user_action);
+    query.bindValue(":target", target);
+    query.bindValue(":status", status);
+    query.bindValue(":ip", ipAddress);
+    query.bindValue(":result", result, QSql::Out);
+
+    if (!query.exec()) {
+        return QString("调用存储过程失败: %1").arg(query.lastError().text());
+    }
+
+    result = query.boundValue(":result").toString();
+    return result;
+}
+QString ManagerSajet::getLocalIP()
+{
+    QStringList ipList;
+    QList<QHostAddress> addresses = QNetworkInterface::allAddresses();
+    for (const QHostAddress &addr : addresses) {
+        if (addr.protocol() == QAbstractSocket::IPv4Protocol && !addr.isLoopback()) {
+            ipList << addr.toString();
+        }
+    }
+    return ipList.join("|");
+}
 bool ManagerSajet::is_SERIAL_NUMBER(const QString &serialNumber)
 {
     // 空串直接返回 false

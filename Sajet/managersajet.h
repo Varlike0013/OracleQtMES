@@ -15,10 +15,13 @@ public:
     static bool is_QcNo(const QString &input);
     static QFuture<bool> exportGatewayData(const QString &filePath);
     static QFuture<QString> updateErpData();
+    static QString insert_user_action(const QString &user_action,const QString &status = QString(),const QString &target = QString());
 
 private:
     static bool exportGatewayDataSync(const QString &filePath, QString &errorMsg);
     static QString updateErpDataSync();
+    static QString getLocalIP();
+
 };
 
 #endif // MANAGERSAJET_H

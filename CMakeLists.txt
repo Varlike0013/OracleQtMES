@@ -26,6 +26,8 @@ qt_add_executable(OracleQtMES
     Sajet/reworkform.h Sajet/reworkform.cpp Sajet/reworkform.ui
     Sajet/materialerp.h Sajet/materialerp.cpp Sajet/materialerp.ui
     Sajet/clearkeyparts.h Sajet/clearkeyparts.cpp Sajet/clearkeyparts.ui
+    Sajet/checkroute.h Sajet/checkroute.cpp Sajet/checkroute.ui
+    Sajet/workorderinfo.h Sajet/workorderinfo.cpp Sajet/workorderinfo.ui
 
 )
 
