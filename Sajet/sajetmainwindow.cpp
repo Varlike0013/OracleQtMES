@@ -17,6 +17,7 @@
 #include "clearkeyparts.h"
 #include "checkroute.h"
 #include "workorderinfo.h"
+#include "tgsgroup.h"
 
 SajetMainWindow::SajetMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -114,6 +115,8 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
         return new CheckRoute(this);
     }else if (pageData == "WorkOrderInfo") {
         return new WorkOrderInfo(this);
+    }else if (pageData == "TGSGroup") {
+        return new TGSGroup(this);
     }else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;

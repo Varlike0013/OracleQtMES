@@ -297,7 +297,7 @@ void StatusTag::update_status_label(QString serial_number)
                       "R.ROUTE_NAME, M.MAC, M.CUSTOMER_SN AS SSN, PP.PCB_QRCODE "
                       "FROM SAJET.G_SN_STATUS S "
                       "LEFT JOIN SAJET.SYS_PART P ON P.PART_ID = S.MODEL_ID "
-                      "LEFT JOIN SAJET.SYS_PROCESS PR ON PR.PROCESS_ID = S.NEXT_PROCESS "
+                      "LEFT JOIN SAJET.SYS_PROCESS PR ON PR.PROCESS_ID = S.WIP_PROCESS "
                       "LEFT JOIN SAJET.SYS_ROUTE R ON R.ROUTE_ID = S.ROUTE_ID "
                       "LEFT JOIN SAJET.G_WO_MAC M ON M.SERIAL_NUMBER = S.SERIAL_NUMBER "
                       "LEFT JOIN SAJET.ECS_PPID_PCB_CODE PP ON PP.STRSMTSN = S.SERIAL_NUMBER "

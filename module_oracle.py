@@ -1,34 +1,3 @@
-def update_woder_status(wo, status):
-    """
-    更新工单的状态。
-    :param wo:     工单号
-    :param status: 新状态（数字，0-6）
-    :return: 'OK' 或错误信息
-    """
-    if not wo:
-        return "工单号不能为空"
-    if status is None or not isinstance(status, int):
-        return "状态值必须为整数"
-
-    sql = """
-        UPDATE SAJET.G_WO_BASE W
-        SET W.WO_STATUS = :status
-        WHERE W.WORK_ORDER = :wo
-    """
-    try:
-        with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(sql, status=status, wo=wo)
-                rowcount = cursor.rowcount
-                conn.commit()
-                if rowcount > 0:
-                    return "OK"
-                else:
-                    return "未找到工单，更新失败"
-    except oracledb.Error as e:
-        return f"数据库错误: {e}"
-    except Exception as e:
-        return f"异常: {e}"
 def fetch_smt_reelup(line, site, sn, time=3):
     """
     查询 SMT 飞达上料信息（远程表）。

@@ -28,6 +28,7 @@ qt_add_executable(OracleQtMES
     Sajet/clearkeyparts.h Sajet/clearkeyparts.cpp Sajet/clearkeyparts.ui
     Sajet/checkroute.h Sajet/checkroute.cpp Sajet/checkroute.ui
     Sajet/workorderinfo.h Sajet/workorderinfo.cpp Sajet/workorderinfo.ui
+    Sajet/tgsgroup.h Sajet/tgsgroup.cpp Sajet/tgsgroup.ui
 
 )
 

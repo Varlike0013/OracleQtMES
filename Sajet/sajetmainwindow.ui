@@ -440,6 +440,14 @@
               <string>UpdateAsusErp</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>TGS</string>
+             </property>
+             <property name="toolTip">
+              <string>TGSGroup</string>
+             </property>
+            </item>
            </item>
           </widget>
          </item>

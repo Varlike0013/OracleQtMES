@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QString>
+#include <QSqlQuery>
 #include "dbconfigmanager.h"
 
 struct DbConnectionResult // 数据库连接结果

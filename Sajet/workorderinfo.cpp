@@ -91,7 +91,6 @@ void WorkOrderInfo::on_lineEditInput_returnPressed()
         QMessageBox::critical(this, tr("错误"), tr("查询失败: %1").arg(query.lastError().text()));
         return;
     }
-    qDebug() << "Executed SQL:" << query.executedQuery();
     // 创建模型并设置查询
     QSqlQueryModel *model = new QSqlQueryModel(this);
     model->setQuery(std::move(query));
@@ -223,12 +222,56 @@ void WorkOrderInfo::loadPDline()
 
 void WorkOrderInfo::on_pushButtonUpdate_clicked()
 {
-    QString workOrder = ui->lineEditWo->text();
-    QString partNo    = ui->lineEditPart->text();
-    int statusCode    = ui->comboBoxStart->currentIndex();
-    QString route = ui->lineEditRoute->text();
-    QString start = ui->comboBoxStart->currentText();
-    QString end   = ui->comboBoxEnd->currentText();
-    QString line  = ui->comboBoxLine->currentText();
+    QString workOrder = ui->lineEditWo->text().trimmed();
+    if (workOrder.isEmpty()) {
+        QMessageBox::warning(this, tr("输入错误"), tr("工单号不能为空"));
+        return;
+    }
+
+    int statusCode = ui->comboBoxStatus->currentIndex();
+    QString route = ui->lineEditRoute->text().trimmed();
+    QString start = ui->comboBoxStart->currentText().trimmed();
+    QString end   = ui->comboBoxEnd->currentText().trimmed();
+    QString line  = ui->comboBoxLine->currentText().trimmed();
+
+    if (route.isEmpty() || start.isEmpty() || end.isEmpty() || line.isEmpty()) {
+        QMessageBox::warning(this, tr("输入错误"), tr("请完整填写更新信息"));
+        return;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        QMessageBox::critical(this, tr("错误"), tr("数据库连接无效"));
+        return;
+    }
+
+    QString sql = "UPDATE SAJET.G_WO_BASE W "
+                  "SET W.WO_STATUS = :status, "
+                  "    W.DEFAULT_PDLINE_ID = (SELECT PDLINE_ID FROM SAJET.SYS_PDLINE WHERE PDLINE_NAME = :line), "
+                  "    W.ROUTE_ID = (SELECT ROUTE_ID FROM SAJET.SYS_ROUTE WHERE ROUTE_NAME = :route), "
+                  "    W.START_PROCESS_ID = (SELECT PROCESS_ID FROM SAJET.SYS_PROCESS WHERE PROCESS_NAME = :startp), "
+                  "    W.END_PROCESS_ID = (SELECT PROCESS_ID FROM SAJET.SYS_PROCESS WHERE PROCESS_NAME = :endp) "
+                  "WHERE W.WORK_ORDER = :wo";
+
+    QSqlQuery query(db);
+    query.prepare(sql);
+    query.bindValue(":status", statusCode);
+    query.bindValue(":line", line);
+    query.bindValue(":route", route);
+    query.bindValue(":startp", start);
+    query.bindValue(":endp", end);
+    query.bindValue(":wo", workOrder);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, tr("错误"), tr("更新失败: %1").arg(query.lastError().text()));
+        return;
+    }
+
+    int affected = query.numRowsAffected();
+    if (affected == 0) {
+        QMessageBox::warning(this, tr("提示"), tr("未找到工单 %1，更新失败").arg(workOrder));
+        return;
+    }
+    on_lineEditInput_returnPressed(); // 重新查询当前条件
 }
 
