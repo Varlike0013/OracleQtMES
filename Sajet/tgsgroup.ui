@@ -204,6 +204,13 @@
                 </widget>
                </item>
                <item>
+                <widget class="QLineEdit" name="lineEditProc">
+                 <property name="placeholderText">
+                  <string>输入存储过程名称</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <spacer name="horizontalSpacer_3">
                  <property name="orientation">
                   <enum>Qt::Orientation::Horizontal</enum>

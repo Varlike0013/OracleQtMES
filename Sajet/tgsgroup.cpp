@@ -468,7 +468,7 @@ void TGSGroup::on_lineEditGroupID_returnPressed()
     }
 
     QString sql = "SELECT T.GROUP_ID,T.GROUP_DESC_E,G.JOB_ID,G.GROUP_SEQ, B.TYPE_NAME_E, B.PROC_CALL_NAME, "
-                  "G.SEQ_ELSE, G.SEQ_OTHER, G.VALUE_KIND,J.TYPE_ID  "
+                  "J.JOB_DESC_E,G.SEQ_ELSE, G.SEQ_OTHER, G.VALUE_KIND,J.TYPE_ID  "
                   "FROM SAJET.TGS_GROUP_BASE T "
                   "INNER JOIN SAJET.TGS_GROUP_LINK G ON G.GROUP_ID = T.GROUP_ID "
                   "INNER JOIN SAJET.TGS_JOB_BASE J ON J.JOB_ID = G.JOB_ID "
@@ -485,13 +485,14 @@ void TGSGroup::on_lineEditGroupID_returnPressed()
         return;
     }
 
-    // 清空旧数据
     m_groupJobList.clear();
+    bool first = true;
     while (query.next()) {
         GroupJobInfo info;
         info.groupId      = query.value("GROUP_ID").toString();
         info.groupName    = query.value("GROUP_DESC_E").toString();
         info.jobId        = query.value("JOB_ID").toString();
+        info.jobDesc      = query.value("JOB_DESC_E").toString();
         info.typeNameE    = query.value("TYPE_NAME_E").toString();
         info.procCallName = query.value("PROC_CALL_NAME").toString();
         info.groupSeq     = query.value("GROUP_SEQ").toString();
@@ -500,6 +501,22 @@ void TGSGroup::on_lineEditGroupID_returnPressed()
         info.valueKind    = query.value("VALUE_KIND").toString();
         info.typeId       = query.value("TYPE_ID").toString();
         m_groupJobList.append(info);
+
+        if (first) {
+            ui->plainTextEditGroup->appendPlainText(
+                QString("[Current Execute Group: %1-%2]").arg(info.groupId).arg(info.groupName)
+                );
+            ui->labelType->setText(info.typeNameE);
+            first = false;
+        }
+        ui->plainTextEditGroup->appendPlainText(
+            QString("[Will Execute Job: %1-%2 (Step: %3); ProcCallName: %4; TypeName: %5]")
+                .arg(info.jobId)
+                .arg(info.jobDesc)
+                .arg(info.groupSeq)
+                .arg(info.procCallName)
+                .arg(info.typeNameE)
+            );
     }
     if (m_groupJobList.isEmpty()) {
         QMessageBox::information(this, tr("提示"), tr("未找到匹配的记录"));
@@ -507,8 +524,6 @@ void TGSGroup::on_lineEditGroupID_returnPressed()
     }
     m_maxStep = m_groupJobList.size();
     m_currentStep = 0;
-    const GroupJobInfo &firstInfo = m_groupJobList.first();
-    ui->plainTextEditGroup->appendPlainText("[Current Execute Group: " + firstInfo.groupId + "-" + firstInfo.groupName + "]");
 }
 void TGSGroup::fetchJobDetails(QString groupid, QString jobid)
 {
@@ -545,7 +560,143 @@ void TGSGroup::fetchJobDetails(QString groupid, QString jobid)
         detail.sprocName = query.value(1).toString();
         m_jobDetailList.append(detail);
     }
+}
+void TGSGroup::executeJobProc(QString TREV,QString procCallname)
+{
+    if (m_jobDetailList.isEmpty()) {
+        ui->plainTextEditGroup->appendPlainText("[ERROR][Execute JobProc: No procedures to execute]");
+        return;
+    }
 
+    ui->plainTextEditGroup->appendPlainText("[INFO][JOB START]");
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        ui->plainTextEditGroup->appendPlainText("[ERROR][Database connection invalid]");
+        return;
+    }
+    m_dataMap[procCallname] = TREV;
+    ui->plainTextEditGroup->appendPlainText("[INFO][INPUT("+TREV+") SAVE TO "+procCallname+"]");
+    for (const JobDetailInfo &jobInfo : m_jobDetailList) {
+        QString procName = jobInfo.sprocName;
+
+        if (procName.isEmpty()) {
+            ui->plainTextEditGroup->appendPlainText("[WARNING][Procedure name is empty, skipped]");
+            continue;
+        }
+
+        ui->plainTextEditGroup->appendPlainText(
+            QString("[INFO][Start Execute: %1]").arg(procName)
+            );
+        ui->plainTextEditGroup->appendPlainText(
+            QString("[INFO][TREV input: %1]").arg(TREV)
+            );
+
+        // 1. 获取存储过程参数信息
+        ProcParams params = getProcedureParams(procName);
+        if (params.inParams.isEmpty() && params.outParams.isEmpty()) {
+            ui->plainTextEditGroup->appendPlainText(
+                QString("[WARNING][%1] No parameter info (insufficient privileges or not a procedure)").arg(procName)
+                );
+            continue;
+        }
+
+        // 2. 构建存储过程调用
+        QString owner, name;
+        if (procName.contains('.')) {
+            QStringList parts = procName.split('.');
+            owner = parts[0].trimmed();
+            name = parts[1].trimmed();
+        } else {
+            owner = OracleManager::instance().getCurrentUsername();
+            name = procName.trimmed();
+        }
+
+        int totalParams = params.inParams.size() + params.outParams.size();
+        QStringList placeholders;
+        for (int i = 0; i < totalParams; ++i) {
+            placeholders << QString(":p%1").arg(i);
+        }
+        QString procCall = QString("BEGIN %1.%2(%3); END;")
+                               .arg(owner)
+                               .arg(name)
+                               .arg(placeholders.join(", "));
+
+        QSqlQuery query(db);
+        query.prepare(procCall);
+
+        // 3. 绑定输入参数（值来自 m_dataMap 或 TREV）
+        int idx = 0;
+        QMap<QString, QString> inParamValues; // 存储参数名和值，用于日志
+        for (const QString &param : params.inParams) {
+            QString value;
+            if (param == "TREV") {
+                value = TREV;
+            } else {
+                value = m_dataMap.value(param, "");
+            }
+            inParamValues[param] = value;
+            query.bindValue(QString(":p%1").arg(idx), value);
+            idx++;
+        }
+
+        // 4. 绑定输出参数（预分配缓冲区）
+        QList<QString> outBuffers;
+        for (int i = 0; i < params.outParams.size(); ++i) {
+            QString buffer;
+            buffer.reserve(4000);
+            outBuffers.append(buffer);
+            query.bindValue(QString(":p%1").arg(idx), buffer, QSql::Out);
+            idx++;
+        }
+
+        // 5. 执行存储过程
+        if (!query.exec()) {
+            ui->plainTextEditGroup->appendPlainText(
+                QString("[ERROR][Execute failed: %1]").arg(query.lastError().text())
+                );
+            continue;
+        }
+
+        // 6. 获取输出参数值
+        QString tresValue;  // 用于存储 TRES 的值
+        QStringList outParamValues;
+        idx = params.inParams.size();
+        for (int i = 0; i < params.outParams.size(); ++i) {
+            QString value = query.boundValue(QString(":p%1").arg(idx)).toString().trimmed();
+            if (params.outParams[i] == "TRES") {
+                tresValue = value;
+            }
+            outParamValues << QString("%1=%2").arg(params.outParams[i]).arg(value.isEmpty() ? "空" : value);
+            idx++;
+        }
+        if (tresValue == "OK") {
+            ui->plainTextEditGroup->appendPlainText(
+                QString("[INFO][TRES: %1]").arg(tresValue)
+                );
+        }else{
+            ui->plainTextEditGroup->appendPlainText(
+                QString("[ERROR][TRES: %1]").arg(tresValue)
+                );
+        }
+
+        // 7. 构造输入参数日志（显示参数名=值）
+        QStringList inParamLog;
+        for (const QString &param : params.inParams) {
+            QString val = inParamValues[param];
+            inParamLog << QString("%1=%2").arg(param).arg(val.isEmpty() ? "空" : val);
+        }
+
+        // 8. 输出执行结果
+        QString log = QString("[INFO][Procedure: %1 | IN: %2]")
+                          .arg(procName)
+                          .arg(inParamLog.join(", "));
+        if (!outParamValues.isEmpty()) {
+            log += QString(" | OUT: %1").arg(outParamValues.join(", "));
+        }
+        ui->plainTextEditGroup->appendPlainText(log);
+    }
+    ui->plainTextEditGroup->appendPlainText("[INFO][JOB COMPLETE]");
+    ui->plainTextEditGroup->appendPlainText("");
 }
 void TGSGroup::on_lineEditTrev_returnPressed()
 {
@@ -553,34 +704,59 @@ void TGSGroup::on_lineEditTrev_returnPressed()
         QMessageBox::warning(this, tr("提示"), tr("请先查询数据"));
         return;
     }
-
     if (m_currentStep >= m_maxStep) {
         QMessageBox::information(this, tr("完成"), tr("所有步骤已执行完毕"));
-        ui->lineEditTrev->setEnabled(false);
         return;
     }
-
-    // 获取当前步骤的 job 信息
     const GroupJobInfo &jobInfo = m_groupJobList[m_currentStep];
     QString input = ui->lineEditTrev->text().trimmed();
 
-    // 显示当前执行信息
-    ui->plainTextEditGroup->appendPlainText(QString("EXECUTE %1/%2: JOB_ID=%3, TREV=%4")
+    ui->plainTextEditGroup->appendPlainText(QString("[EXECUTE %1/%2: JOB_ID=%3, TREV=%4]")
                                                 .arg(m_currentStep + 1)
                                                 .arg(m_maxStep)
                                                 .arg(jobInfo.jobId)
                                                 .arg(input.isEmpty() ? "(空)" : input));
-
-    fetchJobDetails(jobInfo.groupId.toInt(), jobInfo.jobId.toInt());
-
-
-    // 清空输入框，准备下一次输入
+    QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    m_dataMap["TNOW"] = currentTime;
+    ui->plainTextEditGroup->appendPlainText(QString("[INFO][INPUT(%1) SAVE TO TNOW]").arg(currentTime));
+    fetchJobDetails(jobInfo.groupId, jobInfo.jobId);
+    executeJobProc(input,jobInfo.procCallName);
     ui->lineEditTrev->clear();
-
-    // 如果已完成，禁用输入框
+    m_currentStep++;
     if (m_currentStep >= m_maxStep) {
-        ui->lineEditTrev->setEnabled(false);
         QMessageBox::information(this, tr("完成"), tr("所有步骤已执行完毕"));
+        return;
     }
+    const GroupJobInfo &nextJob = m_groupJobList[m_currentStep];
+    ui->labelType->setText(nextJob.typeNameE);
+}
+void TGSGroup::on_comboBoxName_currentIndexChanged(int index)
+{
+    if (index < 0) {
+        ui->plainTextEditGroup->appendPlainText(tr("[Terminal selection cleared]"));
+        return;
+    }
+
+    QVariant var = ui->comboBoxName->itemData(index);
+    if (!var.canConvert<QVariantMap>()) {
+        ui->plainTextEditGroup->appendPlainText(tr("[Terminal Data Empty]"));
+        return;
+    }
+
+    QVariantMap data = var.toMap();
+    QString terminalId   = data["TERMINAL_ID"].toString();
+    QString terminalName = data["TERMINAL_NAME"].toString();
+    QString pdlineId     = data["PDLINE_ID"].toString();
+    QString processId    = data["PROCESS_ID"].toString();
+    QString stageId      = data["STAGE_ID"].toString();
+
+    ui->plainTextEditGroup->appendPlainText(
+        QString("[TERMINAL CHANGED] TTERMINALID: %1 | TTERMINALNAME: %2 | TPDLINEID: %3 | TPROCESSID: %4 | TSTAGEID: %5]")
+            .arg(terminalId)
+            .arg(terminalName)
+            .arg(pdlineId)
+            .arg(processId)
+            .arg(stageId)
+        );
 }
 

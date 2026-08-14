@@ -15,6 +15,7 @@ struct GroupJobInfo {
     QString groupId;
     QString groupName;
     QString jobId;
+    QString jobDesc;
     QString groupSeq;
     QString seqElse;
     QString seqOther;
@@ -43,8 +44,9 @@ private slots:
     void on_comboBoxLine_currentTextChanged(const QString &arg1);
     void on_comboBoxProcess_currentTextChanged(const QString &arg1);
     void on_lineEditGroupID_returnPressed();
-
     void on_lineEditTrev_returnPressed();
+
+    void on_comboBoxName_currentIndexChanged(int index);
 
 private:
     Ui::TGSGroup *ui;
@@ -59,6 +61,7 @@ private:
     ProcParams getProcedureParams(const QString &procName);
     void loadPDline();
     void fetchJobDetails(QString groupid, QString jobid);
+    void executeJobProc(QString TREV,QString procCallname);
 };
 
 #endif // TGSGROUP_H
