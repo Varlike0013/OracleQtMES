@@ -29,6 +29,7 @@ qt_add_executable(OracleQtMES
     Sajet/checkroute.h Sajet/checkroute.cpp Sajet/checkroute.ui
     Sajet/workorderinfo.h Sajet/workorderinfo.cpp Sajet/workorderinfo.ui
     Sajet/tgsgroup.h Sajet/tgsgroup.cpp Sajet/tgsgroup.ui
+    Sajet/tgsgrouptest.h Sajet/tgsgrouptest.cpp Sajet/tgsgrouptest.ui
 
 )
 

@@ -9,6 +9,7 @@
 #include <QHostAddress>
 #include <QNetworkInterface>
 #include <algorithm>
+#include <QComboBox>
 
 ManagerSajet::ManagerSajet() {}
 
@@ -469,4 +470,25 @@ QString ManagerSajet::updateErpDataSync()
 QFuture<QString> ManagerSajet::updateErpData()
 {
     return QtConcurrent::run(updateErpDataSync);
+}
+void ManagerSajet::loadPDline(QComboBox *comboBox)
+{
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when loading PDline.";
+        return;
+    }
+
+    QString sql = "SELECT PDLINE_NAME FROM SAJET.SYS_PDLINE WHERE ENABLED = 'Y' ORDER BY PDLINE_NAME";
+    QSqlQuery query(db);
+    if (!query.exec(sql)) {
+        qWarning() << "Failed to load PDline:" << query.lastError().text();
+        return;
+    }
+
+    comboBox->clear();
+    while (query.next()) {
+        QString lineName = query.value(0).toString();
+        comboBox->addItem(lineName);
+    }
 }

@@ -470,7 +470,7 @@ void PcbQrcode::on_pushButtonUpdate_clicked()
     // 5. 构建更新语句（使用主键条件，保留原创建时间）
     QString sql = "UPDATE SAJET.ECS_PPID_PCB_CODE "
                   "SET ECS_PART_NO = :ecs, PCB_CUST_PN = :cust, PCB_SN = :sn, PCB_QRCODE = :qrcode "
-                  "WHERE STR SMTSN = :str";
+                  "WHERE STRSMTSN = :str";
     QSqlQuery query(db);
     query.prepare(sql);
     query.bindValue(":ecs", ecsPartNo);

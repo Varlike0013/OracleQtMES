@@ -78,6 +78,11 @@
             <string>出货序号</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>新序号</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item>

@@ -44,6 +44,7 @@ void WorkOrderInfo::on_lineEditInput_returnPressed()
         case 1: whereClauses << "P.PART_NO = :input"; break;      // 料号
         case 2: whereClauses << "R.ROUTE_NAME = :input"; break;   // 流程（路由）
         case 3: whereClauses << "PD.PDLINE_NAME = :input"; break; // 线别
+        case 4: whereClauses << "W.WORK_ORDER IN (SELECT DISTINCT T.WORK_ORDER FROM SAJET.G_SN_TRAVEL T WHERE T.SERIAL_NUMBER =:input)"; break; // 线别
         default: return;
     }
 

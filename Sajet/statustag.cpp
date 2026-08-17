@@ -47,6 +47,9 @@ void StatusTag::on_lineEdit_input_returnPressed()
     case 4: //出货序号
         sql = QString("SELECT S.SERIAL_NUMBER FROM SAJET.G_SN_STATUS S WHERE S.CUSTOMER_SN = '%1'").arg(input);
         break;
+    case 5: //变更SN
+        sql = QString("SELECT C.OLD_SERIAL_NUMBER FROM SAJET.G_SN_CHANGE C WHERE C.NEW_SERIAL_NUMBER = '%1'").arg(input);
+        break;
     default:
         return;
     }

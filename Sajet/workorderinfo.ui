@@ -109,6 +109,11 @@
           <string>线别</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>序号</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>

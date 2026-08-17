@@ -3,6 +3,7 @@
 
 #include "oracle_manager.h"
 #include "QFuture"
+#include <QComboBox>
 
 class ManagerSajet
 {
@@ -16,6 +17,7 @@ public:
     static QFuture<bool> exportGatewayData(const QString &filePath);
     static QFuture<QString> updateErpData();
     static QString insert_user_action(const QString &user_action,const QString &status = QString(),const QString &target = QString());
+    static void loadPDline(QComboBox *comboBox);
 
 private:
     static bool exportGatewayDataSync(const QString &filePath, QString &errorMsg);

@@ -442,10 +442,18 @@
             </item>
             <item>
              <property name="text">
-              <string>TGS</string>
+              <string>TGS行为查看</string>
              </property>
              <property name="toolTip">
               <string>TGSGroup</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>TGS行为测试</string>
+             </property>
+             <property name="toolTip">
+              <string>TGSGroupTest</string>
              </property>
             </item>
            </item>

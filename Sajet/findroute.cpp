@@ -137,7 +137,7 @@ void FindRoute::on_pushButtonselect_clicked()
     }
     UpdateTableRroute(dip,pack);
 }
-void FindRoute::UpdateTableRroute(QString pack, QString dip)
+void FindRoute::UpdateTableRroute(QString dip, QString pack)
 {
     QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
     if (!db.isValid() || !db.isOpen()) {
@@ -274,8 +274,8 @@ void FindRoute::on_pushButtonCheck_clicked()
     m_route_info.rework = rework;
     ui->label_old->setText(tr("旧组合流程：%1 + %2").arg(m_route_info.dip, m_route_info.pack));
     ui->label_new->setText(tr("重工流程：%1").arg(rework));
-    QList<RouteStep> oldSteps = getRouteSteps(m_route_info.pack);
-    oldSteps.append(getRouteSteps(m_route_info.dip));
+    QList<RouteStep> oldSteps = getRouteSteps(m_route_info.dip);
+    oldSteps.append(getRouteSteps(m_route_info.pack));
     displaySteps(ui->listView_old, oldSteps, true);
     QList<RouteStep> newSteps = getRouteSteps(rework);
     displaySteps(ui->listView_new, newSteps, true);    // 蓝色 'Y'，红色 'N'
