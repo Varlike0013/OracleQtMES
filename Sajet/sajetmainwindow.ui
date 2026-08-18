@@ -456,6 +456,14 @@
               <string>TGSGroupTest</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>输入转换</string>
+             </property>
+             <property name="toolTip">
+              <string>InputChange</string>
+             </property>
+            </item>
            </item>
           </widget>
          </item>

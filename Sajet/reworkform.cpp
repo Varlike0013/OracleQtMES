@@ -6,8 +6,6 @@
 #include <qsqlquery.h>
 #include <qsqlquerymodel.h>
 
-QMap<QString, QStringList> ReworkForm::m_conditions;
-
 ReworkForm::ReworkForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ReworkForm)
@@ -18,48 +16,6 @@ ReworkForm::ReworkForm(QWidget *parent)
 ReworkForm::~ReworkForm()
 {
     delete ui;
-}
-void ReworkForm::addCondition(const QString &key, const QString &value)
-{
-    if (key.isEmpty() || value.isEmpty()) return;
-    // 如果该键已存在，追加值；否则创建新列表
-    if (m_conditions.contains(key)) {
-        if (!m_conditions[key].contains(value)) {  // 避免重复添加
-            m_conditions[key].append(value);
-        }
-    } else {
-        m_conditions[key] = QStringList() << value;
-    }
-}
-
-bool ReworkForm::removeCondition(const QString &key, const QString &value)
-{
-    if (!m_conditions.contains(key)) return false;
-    bool removed = m_conditions[key].removeOne(value);
-    if (m_conditions[key].isEmpty()) {
-        m_conditions.remove(key);
-    }
-    return removed;
-}
-
-void ReworkForm::clearConditions()
-{
-    m_conditions.clear();
-}
-
-QStringList ReworkForm::getConditionValues(const QString &key)
-{
-    return m_conditions.value(key, QStringList());
-}
-
-QMap<QString, QStringList> ReworkForm::getAllConditions()
-{
-    return m_conditions;
-}
-
-bool ReworkForm::conditionExists(const QString &key, const QString &value)
-{
-    return m_conditions.contains(key) && m_conditions[key].contains(value);
 }
 void ReworkForm::on_pushButtonNew_clicked()
 {
@@ -178,7 +134,7 @@ void ReworkForm::on_lineEditInput_returnPressed()
         ui->treeWidget->expandAll();
 
         // 2. 同步添加到全局字典
-        addCondition(key, text);
+        m_conditions.addCondition(key, text);
 
         // 3. 清空输入框
         ui->lineEditInput->clear();
@@ -188,7 +144,7 @@ void ReworkForm::on_lineEditInput_returnPressed()
 void ReworkForm::UpadteTable()
 {
     // 1. 获取所有条件（键：序列号 / 重工号）
-    QMap<QString, QStringList> conditions = getAllConditions();
+    QMap<QString, QStringList> conditions = m_conditions.getAllConditions();
     QStringList serials = conditions.value("SN");
     QStringList reworks = conditions.value("REWORK");
     QStringList cartons = conditions.value("CARTON");
@@ -372,7 +328,7 @@ void ReworkForm::on_pushButtonReady_clicked()
     bool is_check_qc = (ui->checkBoxQc->checkState() == Qt::Checked);
 
     // 1. 获取所有条件（键：序列号 / 重工号）
-    QMap<QString, QStringList> conditions = getAllConditions();
+    QMap<QString, QStringList> conditions = m_conditions.getAllConditions();
     QStringList serials = conditions.value("SN");
     QStringList reworks = conditions.value("REWORK");
     QStringList cartons = conditions.value("CARTON");
@@ -559,7 +515,7 @@ void ReworkForm::on_checkBoxWo_stateChanged(int arg1)
 void ReworkForm::on_pushButtonClear_clicked()
 {
     ui->treeWidget->clear();
-    clearConditions();
+    m_conditions.clearConditions();
 }
 bool ReworkForm::checkWoQtyEnough(const QString &wo, int needQty, int *remaining)
 {

@@ -237,15 +237,16 @@ void StatusTag::update_table_parts(QString serial_number)
 
     // 4. 构建复杂查询（多表连接）
     QString partsSql = QString(
-                           "SELECT P.PART_NO, K.VERSION, P.SPEC1, K.ITEM_PART_SN, P.PART_TYPE, E.EMP_NAME, "
+                           "SELECT P.PART_NO, K.VERSION, P.SPEC1, K.ITEM_PART_SN, P.PART_TYPE,PR.PROCESS_NAME, E.EMP_NAME, "
                            "TO_CHAR(K.UPDATE_TIME, 'YYYY/MM/DD HH24:MI:SS') AS UPDATE_TIME "
                            "FROM SAJET.G_SN_KEYPARTS K "
                            "LEFT JOIN SAJET.SYS_PART P ON P.PART_ID = K.ITEM_PART_ID "
                            "LEFT JOIN SAJET.SYS_EMP E ON E.EMP_ID = K.UPDATE_USERID "
+                           "LEFT JOIN SAJET.SYS_PROCESS PR ON PR.PROCESS_ID = K.PROCESS_ID "
                            "WHERE K.SERIAL_NUMBER = '%1' "
                            "ORDER BY K.UPDATE_TIME"
                            ).arg(safeSerial);
-
+    qDebug()<<partsSql;
     // 5. 删除旧模型（避免内存泄漏）
     QAbstractItemModel *oldModel = ui->table_parts->model();
     if (oldModel) {
@@ -266,7 +267,7 @@ void StatusTag::update_table_parts(QString serial_number)
     // 自定义可翻译的表头（列数与查询字段数一致）
     QStringList headers;
     headers << tr("零件号")<< tr("版本")<< tr("规格")
-            << tr("关键件序列号") << tr("零件类型") << tr("操作员") << tr("执行时间");   // E.EMP_NAME
+            << tr("关键件序列号") << tr("零件类型") << tr("站位") << tr("操作员") << tr("执行时间");   // E.EMP_NAME
     for (int i = 0; i < headers.size(); ++i) {
         partsModel->setHeaderData(i, Qt::Horizontal, headers[i]);
     }

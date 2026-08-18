@@ -2,6 +2,7 @@
 #define REWORKFORM_H
 
 #include <QWidget>
+#include "conditionmanager.h"
 
 namespace Ui {
 class ReworkForm;
@@ -14,13 +15,6 @@ class ReworkForm : public QWidget
 public:
     explicit ReworkForm(QWidget *parent = nullptr);
     ~ReworkForm();
-    // 全局条件字典管理
-    static void addCondition(const QString &key, const QString &value);
-    static bool removeCondition(const QString &key, const QString &value);
-    static void clearConditions();
-    static QStringList getConditionValues(const QString &key);
-    static QMap<QString, QStringList> getAllConditions();
-    static bool conditionExists(const QString &key, const QString &value);
     void UpadteTable();
 
 private slots:
@@ -34,7 +28,7 @@ private slots:
 
 private:
     Ui::ReworkForm *ui;
-    static QMap<QString, QStringList> m_conditions;   // 全局条件字典
+    ConditionManager m_conditions;
     bool addInputQty(const QString &wo, int qty);
     bool checkWoQtyEnough(const QString &wo, int needQty, int *remaining = nullptr);
 };
