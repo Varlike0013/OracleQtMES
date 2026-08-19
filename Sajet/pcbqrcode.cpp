@@ -341,13 +341,14 @@ void PcbQrcode::on_pushButtonAdd_clicked()
             labelCreateTime->setText(dt.toString("yyyy-MM-dd hh:mm:ss"));
             labelCreateTime->setStyleSheet("QLabel { color: green; font-weight: bold; }");
         } else {
-            labelCreateTime->setText(tr("未找到创建时间"));
+            QDateTime now = QDateTime::currentDateTime();
+            labelCreateTime->setText(now.toString("yyyy-MM-dd hh:mm:ss"));
             labelCreateTime->setStyleSheet("QLabel { color: red; font-weight: bold; }");
         }
     };
 
-    // 当 STR SMTSN 输入内容变化时触发查询
-    connect(editStrSmtsn, &QLineEdit::returnPressed, [&]() {
+    // 当 STRSMTSN 输入内容变化时触发查询
+    connect(editStrSmtsn, &QLineEdit::textChanged, [&]() {
         queryCreateTime(editStrSmtsn->text());
     });
 

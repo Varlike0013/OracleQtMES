@@ -32,6 +32,7 @@ qt_add_executable(OracleQtMES
     Sajet/tgsgrouptest.h Sajet/tgsgrouptest.cpp Sajet/tgsgrouptest.ui
     Sajet/changeinput.h Sajet/changeinput.cpp Sajet/changeinput.ui
     conditionmanager.h conditionmanager.cpp
+    Sajet/exporttravels.h Sajet/exporttravels.cpp Sajet/exporttravels.ui
 
 )
 
