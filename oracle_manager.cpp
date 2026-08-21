@@ -3,6 +3,9 @@
 #include <QDateTime>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QFile>
+#include <QFileDialog>
+#include <QTreeWidgetItem>
 
 // 静态成员初始化
 OracleManager* OracleManager::m_instance = nullptr;
@@ -143,4 +146,120 @@ void OracleManager::disconnectAll()
     // 确保列表清空（closeConnection 应该已经移除所有，但以防万一）
     m_openConnections.clear();
     qDebug() << "All database connections have been closed";
+}
+QString OracleManager::exportTableViewToCsv(QTableView *tableView, QWidget *parent)
+{
+    if (!tableView) {
+        return "exportTableViewToCsv: tableView is null";
+    }
+
+    QAbstractItemModel *model = tableView->model();
+    if (!model) {
+        return "exportTableViewToCsv: model is null";
+    }
+
+    // 让用户选择保存路径
+    QString defaultFileName = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss") + ".csv";
+    QString filePath = QFileDialog::getSaveFileName(parent,
+                                                    QObject::tr("导出 CSV"),
+                                                    defaultFileName,
+                                                    QObject::tr("CSV 文件 (*.csv)"));
+    if (filePath.isEmpty()) {
+        return "user canle";
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        return QString("can't created file: %1").arg(filePath);
+    }
+
+    QTextStream out(&file);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    out.setEncoding(QStringConverter::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
+    out.setGenerateByteOrderMark(true);
+
+    int rowCount = model->rowCount();
+    int colCount = model->columnCount();
+
+    // 写表头
+    QStringList headerItems;
+    for (int col = 0; col < colCount; ++col) {
+        QString header = model->headerData(col, Qt::Horizontal).toString();
+        if (header.isEmpty()) {
+            header = QString("Column%1").arg(col + 1);
+        }
+        if (header.contains(',') || header.contains('"') || header.contains('\n')) {
+            header.replace("\"", "\"\"");
+            header = "\"" + header + "\"";
+        }
+        headerItems << header;
+    }
+    out << headerItems.join(",") << "\n";
+
+    // 写数据行
+    for (int row = 0; row < rowCount; ++row) {
+        QStringList rowItems;
+        for (int col = 0; col < colCount; ++col) {
+            QModelIndex index = model->index(row, col);
+            QString data = model->data(index).toString();
+            if (data.contains(',') || data.contains('"') || data.contains('\n')) {
+                data.replace("\"", "\"\"");
+                data = "\"" + data + "\"";
+            }
+            rowItems << data;
+        }
+        out << rowItems.join(",") << "\n";
+    }
+
+    file.close();
+    return QString();   // 成功返回空字符串
+}
+void OracleManager::setItemVisibility(QTreeWidgetItem *item, const QString &searchText, bool hasSearch)
+{
+    if (!item) return;
+
+    bool isLeaf = (item->childCount() == 0);
+
+    if (isLeaf) {
+        // 叶子节点：匹配全名（不区分大小写）
+        if (hasSearch) {
+            QString name = item->text(0);
+            bool match = name.contains(searchText, Qt::CaseInsensitive);
+            item->setHidden(!match);
+        } else {
+            item->setHidden(false); // 无搜索时全部显示
+        }
+    } else {
+        // 非叶子节点：先递归处理所有子节点
+        for (int i = 0; i < item->childCount(); ++i) {
+            setItemVisibility(item->child(i), searchText, hasSearch);
+        }
+        // 根据是否有可见子节点决定自身是否隐藏
+        bool hasVisible = hasVisibleChild(item);
+        item->setHidden(!hasVisible);
+
+        // 如果处于搜索模式且自身可见，则展开（显示路径）
+        if (hasSearch) {
+            item->setExpanded(hasVisible);
+        } else {
+            item->setExpanded(true);
+        }
+    }
+}
+bool OracleManager::hasVisibleChild(QTreeWidgetItem *item)
+{
+    if (!item) return false;
+    for (int i = 0; i < item->childCount(); ++i) {
+        QTreeWidgetItem *child = item->child(i);
+        if (!child->isHidden()) {
+            return true;
+        }
+        if (hasVisibleChild(child)) {
+            return true;
+        }
+    }
+    return false;
 }

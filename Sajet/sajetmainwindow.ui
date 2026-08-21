@@ -411,6 +411,14 @@
               <string>StatusTag</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>导出流程信息</string>
+             </property>
+             <property name="toolTip">
+              <string>ExportTravels</string>
+             </property>
+            </item>
            </item>
            <item>
             <property name="text">
@@ -462,6 +470,14 @@
              </property>
              <property name="toolTip">
               <string>InputChange</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>封装SQL</string>
+             </property>
+             <property name="toolTip">
+              <string>SQLForm</string>
              </property>
             </item>
            </item>

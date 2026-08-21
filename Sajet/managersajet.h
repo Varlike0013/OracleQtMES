@@ -18,6 +18,8 @@ public:
     static QFuture<QString> updateErpData();
     static QString insert_user_action(const QString &user_action,const QString &status = QString(),const QString &target = QString());
     static void loadPDline(QComboBox *comboBox);
+    static void loadProcess(QComboBox *comboBox, const QString &line);
+    static void loadTerminal(QComboBox *comboBox, const QString &line,const QString &process);
 
 private:
     static bool exportGatewayDataSync(const QString &filePath, QString &errorMsg);

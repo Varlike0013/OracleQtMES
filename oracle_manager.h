@@ -6,6 +6,8 @@
 #include <QSqlError>
 #include <QString>
 #include <QSqlQuery>
+#include <QTableView>
+#include <QTreeWidgetItem>
 #include "dbconfigmanager.h"
 
 struct DbConnectionResult // 数据库连接结果
@@ -43,6 +45,9 @@ public:
     void setCurrentDbMain(const QString &connName);
     QSqlDatabase getCurrentDbMain() const; // 返回副本，但总是从全局池取
     bool isDatabaseValid() const;
+    static QString exportTableViewToCsv(QTableView *tableView, QWidget *parent = nullptr);
+    static void setItemVisibility(QTreeWidgetItem *item, const QString &searchText, bool hasSearch);
+    static bool hasVisibleChild(QTreeWidgetItem *item);
 
 private:
     explicit OracleManager(QObject *parent = nullptr);
@@ -52,6 +57,7 @@ private:
     static CurrentConnectInfo m_currentConnectInfo;//记录当前登陆用户信息和数据库链接
     QString m_connectionName;
     QStringList m_openConnections; // 用于保存所有已打开连接名称的列表
+
 };
 
 #endif // ORACLE_MANAGER_H

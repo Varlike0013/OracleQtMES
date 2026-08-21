@@ -15,6 +15,15 @@ public:
     explicit ExportTravels(QWidget *parent = nullptr);
     ~ExportTravels();
 
+private slots:
+    void on_pushButtonSelect_clicked();
+
+    void on_comboBoxLine_currentTextChanged(const QString &arg1);
+
+    void on_comboBoxProcess_currentTextChanged(const QString &arg1);
+
+    void on_pushButtonExport_clicked();
+
 private:
     Ui::ExportTravels *ui;
 };

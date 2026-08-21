@@ -492,3 +492,74 @@ void ManagerSajet::loadPDline(QComboBox *comboBox)
         comboBox->addItem(lineName);
     }
 }
+void ManagerSajet::loadProcess(QComboBox *comboBox, const QString &line)
+{
+    if (!comboBox) {
+        qWarning() << "loadProcess: comboBox is null";
+        return;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when loading processes.";
+        return;
+    }
+
+    QString sql = "SELECT DISTINCT P.PROCESS_NAME "
+                  "FROM SAJET.SYS_TERMINAL T "
+                  "LEFT JOIN SAJET.SYS_PROCESS P ON P.PROCESS_ID = T.PROCESS_ID "
+                  "WHERE T.PDLINE_ID = (SELECT PDLINE_ID FROM SAJET.SYS_PDLINE WHERE PDLINE_NAME = :line) "
+                  "AND T.ENABLED = 'Y' AND T.CONTROL_ID <> 0 "
+                  "ORDER BY P.PROCESS_NAME";
+
+    QSqlQuery query(db);
+    query.prepare(sql);
+    query.bindValue(":line", line);
+
+    if (!query.exec()) {
+        qWarning() << "Failed to load processes:" << query.lastError().text();
+        return;
+    }
+
+    comboBox->clear();
+    while (query.next()) {
+        comboBox->addItem(query.value(0).toString());
+    }
+}
+
+void ManagerSajet::loadTerminal(QComboBox *comboBox, const QString &line,const QString &process)
+{
+    if (!comboBox) {
+        qWarning() << "loadTerminal: comboBox is null";
+        return;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when loading processes.";
+        return;
+    }
+
+    QString sql = "SELECT T.TERMINAL_NAME "
+                  "FROM SAJET.SYS_TERMINAL T "
+                  "LEFT JOIN SAJET.SYS_PROCESS P ON P.PROCESS_ID = T.PROCESS_ID "
+                  "WHERE T.PDLINE_ID = (SELECT PDLINE_ID FROM SAJET.SYS_PDLINE WHERE PDLINE_NAME = :line) "
+                  "AND T.ENABLED = 'Y' AND T.CONTROL_ID <> 0 "
+                  "AND T.PROCESS_ID = (SELECT PROCESS_ID FROM SAJET.SYS_PROCESS WHERE PROCESS_NAME = :proc)"
+                  "ORDER BY P.PROCESS_NAME";
+
+    QSqlQuery query(db);
+    query.prepare(sql);
+    query.bindValue(":line", line);
+    query.bindValue(":proc", process);
+
+    if (!query.exec()) {
+        qWarning() << "Failed to load terminal:" << query.lastError().text();
+        return;
+    }
+
+    comboBox->clear();
+    while (query.next()) {
+        comboBox->addItem(query.value(0).toString());
+    }
+}
