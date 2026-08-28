@@ -48,11 +48,13 @@ public:
     static QString exportTableViewToCsv(QTableView *tableView, QWidget *parent = nullptr);
     static void setItemVisibility(QTreeWidgetItem *item, const QString &searchText, bool hasSearch);
     static bool hasVisibleChild(QTreeWidgetItem *item);
+    static QString exportSqlToCsv(const QString &sql,
+                                  const QMap<QString, QVariant> &bindValues,
+                                  QTableView *tableView = nullptr);
 
 private:
     explicit OracleManager(QObject *parent = nullptr);
     ~OracleManager();
-
     static OracleManager* m_instance;
     static CurrentConnectInfo m_currentConnectInfo;//记录当前登陆用户信息和数据库链接
     QString m_connectionName;

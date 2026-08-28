@@ -206,8 +206,16 @@ void TGSGroup::on_pushButtonBuild_clicked()
     }
 
     // 清空 frameTest 的旧内容
+    m_inputEdits.clear();
     QLayout *oldLayout = ui->frameTest->layout();
     if (oldLayout) {
+        while (oldLayout->count() > 0) {
+            QLayoutItem *item = oldLayout->takeAt(0);
+            if (item->widget()) {
+                delete item->widget();
+            }
+            delete item;
+        }
         delete oldLayout;
     }
     QVBoxLayout *mainLayout = new QVBoxLayout(ui->frameTest);
@@ -375,5 +383,15 @@ void TGSGroup::on_pushButtonNext_clicked()
     m_currentMatchIndex = (m_currentMatchIndex + 1) % m_matchPositions.size();
     ui->plainTextEdit->setTextCursor(m_matchPositions[m_currentMatchIndex]);
     ui->plainTextEdit->ensureCursorVisible();
+}
+void TGSGroup::on_lineEditProc_returnPressed()
+{
+    m_currentProc = ui->lineEditProc->text().trimmed();
+    if (m_currentProc .isEmpty()) {
+        ui->plainTextEdit->setPlainText(tr("未关联存储过程"));
+        return;
+    }
+    QString source = getProcedureSource(m_currentProc );
+    ui->plainTextEdit->setPlainText(source);
 }
 

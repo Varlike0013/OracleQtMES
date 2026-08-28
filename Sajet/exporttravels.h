@@ -17,15 +17,14 @@ public:
 
 private slots:
     void on_pushButtonSelect_clicked();
-
     void on_comboBoxLine_currentTextChanged(const QString &arg1);
-
     void on_comboBoxProcess_currentTextChanged(const QString &arg1);
-
     void on_pushButtonExport_clicked();
 
 private:
     Ui::ExportTravels *ui;
+    QString m_currentSql;
+    QMap<QString, QVariant> m_bindValues;   // 存储绑定的参数名和值
 };
 
 #endif // EXPORTTRAVELS_H

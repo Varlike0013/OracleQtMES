@@ -208,9 +208,16 @@ void QueryForm::on_pushButtoBuild_clicked()
         return;
     }
 
-    // 2. 清除旧的参数输入框
+    // 2. 清除旧的参数输入框（同时删除布局和所有子控件）
     QLayout *oldLayout = ui->groupBox->layout();
     if (oldLayout) {
+        while (oldLayout->count() > 0) {
+            QLayoutItem *item = oldLayout->takeAt(0);
+            if (item->widget()) {
+                delete item->widget();
+            }
+            delete item;
+        }
         delete oldLayout;
     }
     m_paramEdits.clear();
@@ -268,7 +275,7 @@ void QueryForm::on_pushButtonExecute_clicked()
         QMessageBox::warning(this, tr("错误"), tr("SQL 语句为空"));
         return;
     }
-
+    m_currentSql = sql;
     // 获取数据库连接
     QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
     if (!db.isValid() || !db.isOpen()) {
@@ -277,14 +284,14 @@ void QueryForm::on_pushButtonExecute_clicked()
     }
 
     // 收集参数值（如果存在）
-    QMap<QString, QString> paramValues;
+    m_bindValues.clear();
     if (!m_paramNames.isEmpty()) {
         for (const QString &param : m_paramNames) {
             QLineEdit *edit = m_paramEdits[param];
             if (edit) {
-                paramValues[param] = edit->text().trimmed();
+                m_bindValues[param] = edit->text().trimmed();
             } else {
-                paramValues[param] = "";
+                m_bindValues[param] = "";
             }
         }
     }
@@ -293,7 +300,7 @@ void QueryForm::on_pushButtonExecute_clicked()
     QSqlQuery query(db);
     query.prepare(sql);
     // 绑定参数
-    for (auto it = paramValues.begin(); it != paramValues.end(); ++it) {
+    for (auto it = m_bindValues.begin(); it != m_bindValues.end(); ++it) {
         query.bindValue(":" + it.key(), it.value());
     }
 
@@ -345,9 +352,10 @@ void QueryForm::on_pushButtonExecute_clicked()
 }
 void QueryForm::on_pushButtonExport_clicked()
 {
-    QString result = OracleManager::exportTableViewToCsv(ui->tableView,this);
-    if (result.isEmpty()) {
-        QMessageBox::information(this, tr("成功"), tr("导出成功"));
+    QString result = OracleManager::exportSqlToCsv(m_currentSql,m_bindValues,ui->tableView);
+    if (result.startsWith("OK:")) {
+        QString filePath = result.mid(3);   // 去掉 "OK:"
+        QMessageBox::information(this, tr("成功"), tr("导出成功: %1").arg(filePath));
     } else {
         QMessageBox::critical(this, tr("错误"), tr("导出失败: %1").arg(result));
     }

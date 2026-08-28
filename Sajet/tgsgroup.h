@@ -29,6 +29,7 @@ private slots:
     void on_lineEditQuery_returnPressed();
     void on_pushButtonPrevious_clicked();
     void on_pushButtonNext_clicked();
+    void on_lineEditProc_returnPressed();
 
 private:
     Ui::TGSGroup *ui;

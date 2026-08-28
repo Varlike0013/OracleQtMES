@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QTreeWidgetItem>
+#include <QSqlRecord>
 
 // 静态成员初始化
 OracleManager* OracleManager::m_instance = nullptr;
@@ -262,4 +263,117 @@ bool OracleManager::hasVisibleChild(QTreeWidgetItem *item)
         }
     }
     return false;
+}
+QString OracleManager::exportSqlToCsv(const QString &sql,
+                                      const QMap<QString, QVariant> &bindValues,
+                                      QTableView *tableView)
+{
+    if (sql.trimmed().isEmpty()) {
+        return "SQL statement is empty";
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        return "Database connection is invalid or not open";
+    }
+
+    QSqlQuery query(db);
+    query.setForwardOnly(true);
+
+    // 如果有绑定值，使用 prepare + bindValue
+    if (!bindValues.isEmpty()) {
+        query.prepare(sql);
+        for (auto it = bindValues.begin(); it != bindValues.end(); ++it) {
+            query.bindValue(it.key(), it.value());
+        }
+        if (!query.exec()) {
+            return QString("Query execution failed: %1").arg(query.lastError().text());
+        }
+    } else {
+        // 无绑定值，直接执行
+        if (!query.exec(sql)) {
+            return QString("Query execution failed: %1").arg(query.lastError().text());
+        }
+    }
+
+    // 弹出文件保存对话框
+    QString defaultFileName = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss") + ".csv";
+    QString filePath = QFileDialog::getSaveFileName(nullptr,
+                                                    QObject::tr("导出 CSV"),
+                                                    defaultFileName,
+                                                    QObject::tr("CSV 文件 (*.csv)"));
+    if (filePath.isEmpty()) {
+        return "User canceled export";
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        return QString("Cannot create file: %1").arg(filePath);
+    }
+
+    QTextStream out(&file);
+    out.setEncoding(QStringConverter::Utf8);
+    out.setGenerateByteOrderMark(true);
+
+    // 获取字段记录（用于表头和数据）
+    QSqlRecord record = query.record();
+    int colCount = record.count();
+
+    // ---------- 决定表头 ----------
+    QStringList headerItems;
+    if (tableView) {
+        QAbstractItemModel *model = tableView->model();
+        if (model) {
+            int modelCols = model->columnCount();
+            int cols = qMin(colCount, modelCols);
+            for (int i = 0; i < cols; ++i) {
+                QString header = model->headerData(i, Qt::Horizontal).toString();
+                if (header.isEmpty()) {
+                    header = record.fieldName(i);
+                }
+                headerItems << header;
+            }
+            for (int i = modelCols; i < colCount; ++i) {
+                headerItems << record.fieldName(i);
+            }
+        } else {
+            for (int i = 0; i < colCount; ++i) {
+                headerItems << record.fieldName(i);
+            }
+        }
+    } else {
+        for (int i = 0; i < colCount; ++i) {
+            headerItems << record.fieldName(i);
+        }
+    }
+
+    // 转义表头特殊字符
+    for (int i = 0; i < headerItems.size(); ++i) {
+        QString header = headerItems[i];
+        if (header.contains(',') || header.contains('"') || header.contains('\n')) {
+            header.replace("\"", "\"\"");
+            header = "\"" + header + "\"";
+        }
+        headerItems[i] = header;
+    }
+    out << headerItems.join(",") << "\n";
+
+    // ---------- 写入数据 ----------
+    int rowCount = 0;
+    while (query.next()) {
+        QStringList rowItems;
+        for (int i = 0; i < colCount; ++i) {
+            QString data = query.value(i).toString();
+            if (data.contains(',') || data.contains('"') || data.contains('\n')) {
+                data.replace("\"", "\"\"");
+                data = "\"" + data + "\"";
+            }
+            rowItems << data;
+        }
+        out << rowItems.join(",") << "\n";
+        rowCount++;
+    }
+    file.close();
+
+    return "OK:" + filePath;
 }

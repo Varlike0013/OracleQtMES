@@ -31,6 +31,8 @@ private:
     Ui::QueryForm *ui;
     QStringList m_paramNames;               // 参数名称列表
     QMap<QString, QLineEdit*> m_paramEdits; // 参数名 -> 输入框
+    QString m_currentSql;
+    QMap<QString, QVariant> m_bindValues;   // 存储绑定的参数名和值
     QTreeWidgetItem *m_selectedItem = nullptr;
     static QString configFilePath();
     void loadSQL();

@@ -19,41 +19,7 @@ TGSGroupTest::~TGSGroupTest()
 }
 void TGSGroupTest::on_comboBoxLine_currentTextChanged(const QString &arg1)
 {
-    if (arg1.trimmed().isEmpty()) {
-        ui->comboBoxProcess->clear();
-        return;
-    }
-
-    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
-    if (!db.isValid() || !db.isOpen()) {
-        QMessageBox::critical(this, tr("错误"), tr("数据库连接无效"));
-        return;
-    }
-
-    QString sql = "SELECT DISTINCT PR.PROCESS_NAME "
-                  "FROM SAJET.SYS_TERMINAL T "
-                  "JOIN SAJET.SYS_PROCESS PR ON PR.PROCESS_ID = T.PROCESS_ID "
-                  "WHERE T.PDLINE_ID = (SELECT P.PDLINE_ID FROM SAJET.SYS_PDLINE P WHERE P.PDLINE_NAME = :line) "
-                  "AND T.ENABLED = 'Y' "
-                  "ORDER BY PR.PROCESS_NAME";
-
-    QSqlQuery query(db);
-    query.prepare(sql);
-    query.bindValue(":line", arg1);
-
-    if (!query.exec()) {
-        QMessageBox::critical(this, tr("错误"), tr("查询工序失败: %1").arg(query.lastError().text()));
-        return;
-    }
-
-    ui->comboBoxProcess->clear();
-    while (query.next()) {
-        ui->comboBoxProcess->addItem(query.value(0).toString());
-    }
-
-    if (ui->comboBoxProcess->count() == 0) {
-        ui->comboBoxProcess->addItem(tr("无工序"));
-    }
+    ManagerSajet::loadProcess(ui->comboBoxProcess,arg1);
 }
 
 void TGSGroupTest::on_comboBoxProcess_currentTextChanged(const QString &arg1)
@@ -76,6 +42,7 @@ void TGSGroupTest::on_comboBoxProcess_currentTextChanged(const QString &arg1)
                   "JOIN SAJET.SYS_PROCESS PR ON PR.PROCESS_ID = T.PROCESS_ID "
                   "WHERE T.PDLINE_ID = (SELECT P.PDLINE_ID FROM SAJET.SYS_PDLINE P WHERE P.PDLINE_NAME = :line) "
                   "AND T.ENABLED = 'Y' AND PR.PROCESS_NAME = :process "
+                  "AND T.CONTROL_ID <> 0 "
                   "ORDER BY T.TERMINAL_NAME";
 
     QSqlQuery query(db);
