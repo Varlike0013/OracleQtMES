@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+
+    QCoreApplication::setOrganizationName("VarlikeSoft");
     // 检查命令行参数是否包含 "console"（不区分大小写）
     QStringList args = QCoreApplication::arguments();
     bool showConsole = args.contains("console", Qt::CaseInsensitive) ||

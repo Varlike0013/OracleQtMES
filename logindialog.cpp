@@ -19,13 +19,19 @@ LoginDialog::LoginDialog(QWidget *parent)
 
     // 读取保存的语言设置
     QSettings settings;
+    qDebug() << "Default settings file:" << settings.fileName();
     QString defaultLocale = settings.value("language", "zh_CN").toString();
     QString lastDb = settings.value("lastDatabase").toString();
+    QString lastUser = settings.value("lastUser").toString();
+    qDebug()<<"LastDB:"<<lastDb<<"; DefaultLoacle:"<<defaultLocale<<"; lastUser:"<<lastUser;
     if (!lastDb.isEmpty()) {
         int index = ui->comboDatabase->findData(lastDb);
         if (index != -1) {
             ui->comboDatabase->setCurrentIndex(index);
         }
+    }
+    if(!lastUser.isEmpty()){
+        ui->editUsername->setText(lastUser);
     }
     // 设置下拉框的当前索引
     int index = ui->comboLanguage->findData(defaultLocale);
@@ -124,6 +130,8 @@ void LoginDialog::on_btnConnect_clicked()
     if (data.isValid()) {
         QSettings settings;
         settings.setValue("lastDatabase", data.toString());
+        settings.setValue("lastUser", user);
+        qDebug() << "Saved LastDb:" << data.toString();
     }
     // 6. 关闭测试连接（释放资源）
     oracleMgr.closeConnection(loginConnect);
@@ -214,7 +222,7 @@ void LoginDialog::switchLanguage(const QString &locale)
 }
 void LoginDialog::on_editUsername_returnPressed()
 {
-    ui->editPassword->setFocus();
+    on_btnConnect_clicked();
 }
 void LoginDialog::on_editPassword_returnPressed()
 {
