@@ -320,6 +320,9 @@
              <property name="text">
               <string>员工</string>
              </property>
+             <property name="toolTip">
+              <string>CheckEMP</string>
+             </property>
             </item>
             <item>
              <property name="text">

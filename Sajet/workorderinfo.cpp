@@ -1,6 +1,7 @@
 #include "workorderinfo.h"
 #include "ui_workorderinfo.h"
 #include "oracle_manager.h"
+#include "managersajet.h"
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -274,5 +275,15 @@ void WorkOrderInfo::on_pushButtonUpdate_clicked()
         return;
     }
     on_lineEditInput_returnPressed(); // 重新查询当前条件
+}
+void WorkOrderInfo::on_lineEditRoute_returnPressed()
+{
+    QString route = ui->lineEditRoute->text().trimmed();
+    if (!ManagerSajet::is_RouteName(route)) {
+        QMessageBox::warning(this, tr("输入错误"), tr("流程名称不存在"));
+        return;
+    }
+    ManagerSajet::loadRouteProcess(ui->comboBoxStart,route);
+    ManagerSajet::loadRouteProcess(ui->comboBoxEnd,route);
 }
 

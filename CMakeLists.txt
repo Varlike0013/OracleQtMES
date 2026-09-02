@@ -34,6 +34,7 @@ qt_add_executable(OracleQtMES
     conditionmanager.h conditionmanager.cpp
     Sajet/exporttravels.h Sajet/exporttravels.cpp Sajet/exporttravels.ui
     Sajet/queryform.h Sajet/queryform.cpp Sajet/queryform.ui
+    Sajet/checkemp.h Sajet/checkemp.cpp Sajet/checkemp.ui
 
 )
 

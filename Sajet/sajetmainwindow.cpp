@@ -22,6 +22,7 @@
 #include "changeinput.h"
 #include "exporttravels.h"
 #include "queryform.h"
+#include "checkemp.h"
 
 SajetMainWindow::SajetMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -129,6 +130,8 @@ QWidget* SajetMainWindow::createWidgetFromData(const QString &pageData)
         return new ExportTravels(this);
     }else if (pageData == "SQLForm") {
         return new QueryForm(this);
+    }else if (pageData == "CheckEMP") {
+        return new CheckEMP(this);
     }else {
         QMessageBox::critical(this, tr("错误"), tr("无法创建页面: %1").arg(pageData));
         return nullptr;

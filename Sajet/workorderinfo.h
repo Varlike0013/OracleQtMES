@@ -20,6 +20,8 @@ private slots:
     void on_tableView_clicked(const QModelIndex &index);
     void on_pushButtonUpdate_clicked();
 
+    void on_lineEditRoute_returnPressed();
+
 private:
     Ui::WorkOrderInfo *ui;
     void loadPDline();

@@ -177,6 +177,35 @@ bool ManagerSajet::is_WorkOrderNo(const QString &input)
 
     return false;
 }
+bool ManagerSajet::is_RouteName(const QString &input)
+{
+    // 空串直接返回 false
+    if (input.isEmpty()) {
+        return false;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when checking ROUTE_NAME";
+        return false;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT COUNT(*) FROM SAJET.SYS_ROUTE R WHERE R.ROUTE_NAME = :input");
+    query.bindValue(":input", input);
+
+    if (!query.exec()) {
+        qWarning() << "Query failed in is_RouteName:" << query.lastError().text();
+        return false;
+    }
+
+    if (query.next()) {
+        int count = query.value(0).toInt();
+        return count > 0;
+    }
+
+    return false;
+}
 bool ManagerSajet::is_QcNo(const QString &input)
 {
     // 空串直接返回 false
@@ -526,7 +555,39 @@ void ManagerSajet::loadProcess(QComboBox *comboBox, const QString &line)
         comboBox->addItem(query.value(0).toString());
     }
 }
+void ManagerSajet::loadRouteProcess(QComboBox *comboBox, const QString &route)
+{
+    if (!comboBox) {
+        qWarning() << "loadRouteProcess: comboBox is null";
+        return;
+    }
 
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when loading processes.";
+        return;
+    }
+
+    QString sql = "SELECT P.PROCESS_NAME FROM SAJET.SYS_ROUTE_DETAIL RD "
+                  "LEFT JOIN SAJET.SYS_PROCESS P ON P.PROCESS_ID = RD.NEXT_PROCESS_ID "
+                  "WHERE RD.ROUTE_ID = (SELECT R.ROUTE_ID FROM SAJET.SYS_ROUTE R WHERE R.ROUTE_NAME = :route) "
+                  "AND RD.SEQ = RD.STEP "
+                  "ORDER BY RD.STEP";
+
+    QSqlQuery query(db);
+    query.prepare(sql);
+    query.bindValue(":route", route);
+
+    if (!query.exec()) {
+        qWarning() << "Failed to load processes:" << query.lastError().text();
+        return;
+    }
+
+    comboBox->clear();
+    while (query.next()) {
+        comboBox->addItem(query.value(0).toString());
+    }
+}
 void ManagerSajet::loadTerminal(QComboBox *comboBox, const QString &line,const QString &process)
 {
     if (!comboBox) {
