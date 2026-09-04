@@ -104,7 +104,7 @@ void MainWindow::loadDatabaseTree()
             addDatabaseObject(tableRoot, owner, tableName, schemaCache, prefixCache);
         }
     } else {
-        qWarning() << "查询表失败:" << tableQuery.lastError().text();
+        qWarning() << "SELECT TABLE ERR:" << tableQuery.lastError().text();
     }
     // ---- 加载存储过程 ----
     QSqlQuery procQuery(m_db);
@@ -117,7 +117,7 @@ void MainWindow::loadDatabaseTree()
             addDatabaseObject(procRoot, owner, procName, schemaCache, prefixCache);
         }
     } else {
-        qWarning() << "查询存储过程失败:" << procQuery.lastError().text();
+        qWarning() << "SELECT PROCEDURE ERR:" << procQuery.lastError().text();
     }
     // ---- 排序 ----
     ui->treeObjects->sortItems(0, Qt::AscendingOrder);

@@ -1,6 +1,7 @@
 #include "checkemp.h"
 #include "ui_checkemp.h"
 #include "oracle_manager.h"
+#include "managersajet.h"
 #include <QSqlQueryModel>
 #include <QMessageBox>
 #include <QStandardItemModel>
@@ -11,6 +12,7 @@ CheckEMP::CheckEMP(QWidget *parent)
 {
     ui->setupUi(this);
     loadRole();
+    ManagerSajet::loadDept(ui->comboBoxDept);
 }
 
 CheckEMP::~CheckEMP()
@@ -293,6 +295,130 @@ void CheckEMP::on_pushButtonSave_clicked()
     } else {
         db.rollback();
         QMessageBox::critical(this, tr("错误"), tr("更新角色失败"));
+    }
+}
+
+
+void CheckEMP::on_pushButtonClear_clicked()
+{
+    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(ui->tableViewRole->model());
+    if (!model) {
+        qWarning() << "model is't QStandardItemModel or nullptr";
+        return;
+    }
+
+    const int checkColumn = 2; // 复选框所在列索引
+    if (checkColumn < 0 || checkColumn >= model->columnCount()) {
+        qWarning() << "checkColumn is nullptr" << model->columnCount();
+        return;
+    }
+
+    for (int row = 0; row < model->rowCount(); ++row) {
+        QStandardItem *item = model->item(row, checkColumn);
+        if (item && item->isCheckable()) {
+            item->setCheckState(Qt::Unchecked);
+        }
+    }
+
+    ui->tableViewRole->viewport()->update();
+}
+
+void CheckEMP::on_pushButtonAll_clicked()
+{
+    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(ui->tableViewRole->model());
+    if (!model) {
+        qWarning() << "model is't QStandardItemModel or nullptr";
+        return;
+    }
+
+    const int checkColumn = 2; // 复选框所在列索引
+    if (checkColumn < 0 || checkColumn >= model->columnCount()) {
+        qWarning() << "checkColumn is nullptr" << model->columnCount();
+        return;
+    }
+
+    for (int row = 0; row < model->rowCount(); ++row) {
+        QStandardItem *item = model->item(row, checkColumn);
+        if (item && item->isCheckable()) {
+            item->setCheckState(Qt::Checked);
+        }
+    }
+
+    ui->tableViewRole->viewport()->update();
+}
+
+void CheckEMP::on_lineEditEmp_returnPressed()
+{
+    QString empNo = ui->lineEditEmp->text().trimmed();
+    ManagerSajet::is_Emp(empNo);
+    if (!ManagerSajet::is_Emp(empNo)) {
+        QMessageBox::critical(this, tr("错误"), tr("未找到工号"));
+        return;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "数据库连接无效";
+        return;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT R.ROLE_ID FROM SAJET.SYS_ROLE_EMP R "
+                  "WHERE R.EMP_ID = (SELECT EMP_ID FROM SAJET.SYS_EMP WHERE EMP_NO = :eno)");
+    query.bindValue(":eno", empNo);
+    if (!query.exec()) {
+        qWarning() << "查询角色失败:" << query.lastError().text();
+        return;
+    }
+
+    QAbstractItemModel *roleModel = ui->tableViewRole->model();
+    if (!roleModel) {
+        qWarning() << "角色表格模型为空，请先调用 loadRole()";
+        return;
+    }
+
+    int checkColumn = 2;
+    for (int row = 0; row < roleModel->rowCount(); ++row) {
+        QModelIndex checkIndex = roleModel->index(row, checkColumn);
+        if (!checkIndex.isValid()) continue;
+
+        int roleId = roleModel->data(checkIndex, Qt::UserRole).toInt();
+
+        bool hasRole = m_roleIds.contains(roleId);
+        Qt::CheckState state = hasRole ? Qt::Checked : Qt::Unchecked;
+
+        // 更新复选框状态（需将模型转为 QStandardItemModel）
+        QStandardItemModel *stdModel = qobject_cast<QStandardItemModel*>(roleModel);
+        if (stdModel) {
+            QStandardItem *item = stdModel->item(row, checkColumn);
+            if (item) {
+                item->setCheckState(state);
+            }
+        } else {
+            roleModel->setData(checkIndex, state, Qt::CheckStateRole);
+        }
+    }
+}
+
+void CheckEMP::on_pushButtonSubmit_clicked()
+{
+    QString empNo = ui->lineEditEmpNo->text().trimmed();
+    QString empName = ui->lineEditEmpName->text().trimmed();
+    QString email = ui->lineEditEmail->text().trimmed();
+    QString desc = ui->lineEditDesc->text().trimmed();
+    QString dept = ui->comboBoxDept->currentText().trimmed();
+    bool is_quit = ui->checkBox->isChecked();
+    if (empNo.isEmpty()||empName.isEmpty()) {
+        QMessageBox::critical(this,tr("错误"),tr("工号和名称不能为空"));
+        return;
+    }
+    bool isEmp = ManagerSajet::is_Emp(empNo);
+    if(isEmp){
+
+    }else{
+        if(is_quit){
+
+        }
     }
 }
 

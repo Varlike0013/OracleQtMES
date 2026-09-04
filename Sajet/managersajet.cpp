@@ -235,6 +235,35 @@ bool ManagerSajet::is_QcNo(const QString &input)
 
     return false;
 }
+bool ManagerSajet::is_Emp(const QString &input)
+{
+    // 空串直接返回 false
+    if (input.isEmpty()) {
+        return false;
+    }
+
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when checking EMP_NO";
+        return false;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT COUNT(*) FROM SAJET.SYS_EMP WHERE EMP_NO = :input");
+    query.bindValue(":input", input);
+
+    if (!query.exec()) {
+        qWarning() << "Query failed in is_Emp:" << query.lastError().text();
+        return false;
+    }
+
+    if (query.next()) {
+        int count = query.value(0).toInt();
+        return count > 0;
+    }
+
+    return false;
+}
 static QString getGatewayIP(QSqlDatabase &db, const QString &serverId,
                             const QString &gatewayId, const QString &driverId,
                             QString &error)
@@ -519,6 +548,27 @@ void ManagerSajet::loadPDline(QComboBox *comboBox)
     while (query.next()) {
         QString lineName = query.value(0).toString();
         comboBox->addItem(lineName);
+    }
+}
+void ManagerSajet::loadDept(QComboBox *comboBox)
+{
+    QSqlDatabase db = OracleManager::instance().getCurrentDbMain();
+    if (!db.isValid() || !db.isOpen()) {
+        qWarning() << "Database connection invalid when loading DEPT.";
+        return;
+    }
+
+    QString sql = "SELECT D.DEPT_NAME FROM SAJET.SYS_DEPT D WHERE D.ENABLED = 'Y' ORDER BY D.DEPT_NAME";
+    QSqlQuery query(db);
+    if (!query.exec(sql)) {
+        qWarning() << "Failed to load DEPT:" << query.lastError().text();
+        return;
+    }
+
+    comboBox->clear();
+    while (query.next()) {
+        QString dept = query.value(0).toString();
+        comboBox->addItem(dept);
     }
 }
 void ManagerSajet::loadProcess(QComboBox *comboBox, const QString &line)

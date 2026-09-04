@@ -18,8 +18,11 @@ public:
 private slots:
     void on_lineEditInput_returnPressed();
     void on_tableViewEmp_clicked(const QModelIndex &index);
-
     void on_pushButtonSave_clicked();
+    void on_pushButtonClear_clicked();
+    void on_pushButtonAll_clicked();
+    void on_lineEditEmp_returnPressed();
+    void on_pushButtonSubmit_clicked();
 
 private:
     Ui::CheckEMP *ui;

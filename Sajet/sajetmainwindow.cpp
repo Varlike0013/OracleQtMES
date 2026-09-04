@@ -279,5 +279,5 @@ void SajetMainWindow::on_pushButtonSysdown_clicked()
     this->hide();
     MainWindow *newWindow = new MainWindow;
     newWindow->show();
-    this->deleteLater();
+    //this->deleteLater();
 }
